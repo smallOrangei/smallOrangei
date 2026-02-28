@@ -1,741 +1,530 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小橙 | Java中级程序员</title>
-    <!-- Three.js 3D图形库 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Anime.js 动画库 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <!-- Typed.js 打字效果 -->
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-    <!-- AOS 滚动动画 -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <!-- Particles.js 粒子效果 -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>🌸 雯雯 · 26岁生日快乐 🌸</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent; /* 移动端去除点击灰块 */
         }
 
         body {
-            background: #0a0a2a;
-            color: #fff;
-            overflow-x: hidden;
             min-height: 100vh;
-            touch-action: manipulation;
-        }
-
-        #starfield {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-        }
-
-        #particles-js {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            padding: 100px 0 60px;
-            text-align: center;
+            background: radial-gradient(circle at 30% 30%, #ffd9e6, #ffb6c1 60%, #faa0b5);
+            font-family: 'Segoe UI', 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
-            min-height: 100vh;
+            overflow-x: hidden;
+            touch-action: pan-y pinch-zoom; /* 保留手势但减少干扰，双击缩放靠js阻止 */
+        }
+
+        /* 背景花海 —— 无数粉嫩小花盛开动画 */
+        .flower-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;  /* 让点击穿透到蜡烛 */
+            z-index: 0;
+        }
+
+        .flower {
+            position: absolute;
+            font-size: 1.8rem;
+            opacity: 0.7;
+            animation: floatFlower 8s infinite ease-in-out;
+            color: #ffb3c6; /* 粉色基调 */
+            text-shadow: 0 0 8px #fff0f5, 0 0 15px #ffb3c6;
+            user-select: none;
+        }
+
+        /* 不同花朵字符 (盛开的各种花朵符号) */
+        .flower::before {
+            content: "🌸"; /* 默认樱花 */
+        }
+        .flower.rose::before { content: "🌹"; }
+        .flower.tulip::before { content: "🌷"; }
+        flower.hibiscus::before { content: "🌺"; }
+        .flower.blossom::before { content: "🌼"; }
+        .flower.sunflower::before { content: "🌻"; }
+        .flower.lily::before { content: "🪷"; }  /* 荷花也粉嫩 */
+        .flower.cherry::before { content: "🌸"; }
+
+        @keyframes floatFlower {
+            0% { transform: translateY(0vh) rotate(0deg) scale(0.9); opacity: 0.5; }
+            50% { transform: translateY(-3vh) rotate(8deg) scale(1.2); opacity: 0.9; }
+            100% { transform: translateY(0vh) rotate(0deg) scale(0.9); opacity: 0.5; }
+        }
+
+        /* 主卡片：蛋糕/蜡烛区域 */
+        .birthday-card {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 240, 245, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 60px 60px 40px 40px;
+            padding: 2.5rem 2rem 2rem 2rem;
+            box-shadow: 0 25px 40px rgba(255, 120, 160, 0.3),
+                        0 0 0 8px #ffe4ec inset,
+                        0 0 0 12px #ffc0cb inset;
+            max-width: 90vw;
+            width: 420px;
+            border: 2px solid #fff9;
+            text-align: center;
+            margin: 20px auto;
+            transition: box-shadow 0.2s;
+        }
+
+        /* 26岁大标题 */
+        .age {
+            font-size: 4.8rem;
+            font-weight: 800;
+            color: #b3405a;
+            text-shadow: 3px 3px 0 #fff0f5, 6px 6px 0 #ffb6c1, 8px 8px 10px rgba(255, 192, 203, 0.5);
+            line-height: 1;
+            margin-bottom: 0.2rem;
+            letter-spacing: 6px;
+        }
+
+        .sub {
+            font-size: 1.5rem;
+            color: #a63b4f;
+            background: #fff0f5cc;
+            display: inline-block;
+            padding: 0.3rem 2rem;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ffb6c1;
+            box-shadow: 0 4px 8px #ffb6c1;
+        }
+
+        /* 蜡烛容器 (双击区域) */
+        .candle-wrapper {
+            display: flex;
+            justify-content: center;
+            margin: 1.8rem 0 1rem;
+            cursor: pointer;
+            touch-action: manipulation; /* 禁用双击缩放 */
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        /* 蜡烛主体 */
+        .candle {
+            position: relative;
+            width: 110px;
+            height: 230px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            align-items: center;
+            filter: drop-shadow(0 15px 12px rgba(180, 80, 120, 0.3));
         }
 
-        .name {
-            font-size: 3.5rem;
-            font-weight: 800;
-            background: linear-gradient(45deg, #ff7b00, #ffaa00, #ffcc00);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 20px;
-            text-shadow: 0 0 15px rgba(255, 123, 0, 0.5);
-            letter-spacing: 2px;
+        /* 烛身 */
+        .candle-body {
+            width: 80px;
+            height: 160px;
+            background: linear-gradient(145deg, #ffe5f0, #ffc0cb 75%, #faa0b5);
+            border-radius: 40px 40px 20px 20px;
+            border: 3px solid #fff9;
+            box-shadow: 0 6px 0 #d08a9c, 0 10px 12px #ffa5b9 inset;
+            position: relative;
+            top: 20px;
         }
 
-        .title {
+        /* 烛芯 */
+        .wick {
+            width: 5px;
+            height: 20px;
+            background: #6d4c4c;
+            border-radius: 2px 2px 0 0;
+            position: relative;
+            top: 8px;
+            z-index: 5;
+            box-shadow: 0 0 5px #cc9c9c;
+        }
+
+        /* 火焰 (初始燃烧状态) */
+        .flame {
+            width: 28px;
+            height: 55px;
+            background: radial-gradient(circle at 50% 30%, #fffcdc, #ffb347 50%, #ff6f61);
+            border-radius: 60% 40% 50% 50% / 40% 40% 60% 60%;
+            position: relative;
+            top: -18px;
+            z-index: 20;
+            transform-origin: center bottom;
+            animation: flicker 0.15s infinite alternate, sway 0.6s infinite ease-in-out;
+            box-shadow: 0 -8px 25px #ffcc66, 0 -2px 30px #ffa500, 0 0 30px #ff69b4;
+            border: 2px solid #fff8e7;
+        }
+
+        /* 火焰闪烁 */
+        @keyframes flicker {
+            0% { transform: scaleX(1) scaleY(1) translateY(0); opacity: 0.9; }
+            100% { transform: scaleX(1.1) scaleY(1.06) translateY(-2px); opacity: 1; }
+        }
+        @keyframes sway {
+            0% { transform: rotate(-1deg); }
+            50% { transform: rotate(2deg); }
+            100% { transform: rotate(-1deg); }
+        }
+
+        /* 蜡烛底座 (奶油/蛋糕) */
+        .candle-base {
+            width: 110px;
+            height: 28px;
+            background: #ffe0f0;
+            border-radius: 30px 30px 50% 50%;
+            border: 4px solid #ffb6c1;
+            box-shadow: 0 8px 0 #e68ca3;
+            position: relative;
+            top: 10px;
+            background: linear-gradient(145deg, #ffe4f0, #ffc2d0);
+        }
+
+        /* 小爱心装饰 */
+        .candle-base::before, .candle-base::after {
+            content: "❤️";
+            position: absolute;
+            font-size: 22px;
+            top: -18px;
+            filter: drop-shadow(0 4px 4px #ffa5b9);
+        }
+        .candle-base::before { left: 5px; }
+        .candle-base::after { right: 5px; }
+
+        /* 蜡烛熄灭状态 */
+        .candle.extinguished .flame {
+            display: none;
+        }
+
+        .candle.extinguished .wick {
+            background: #4d3d3d;
+            height: 18px;
+            box-shadow: none;
+        }
+
+        .candle.extinguished .candle-body {
+            filter: brightness(0.95) grayscale(0.2);
+        }
+
+        /* 音乐状态小提示 (优雅小音符) */
+        .music-tip {
+            margin-top: 1rem;
             font-size: 1.6rem;
-            margin-bottom: 30px;
-            color: #a0a0ff;
+            letter-spacing: 8px;
+            opacity: 0.7;
+            animation: softGlow 3s infinite;
+            color: #b04962;
+            background: #ffeef2aa;
+            border-radius: 40px;
+            padding: 0.2rem 1rem;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+            border: 1px solid #ffb6c1;
+        }
+        @keyframes softGlow {
+            0% { text-shadow: 0 0 5px #ffb6c1; }
+            50% { text-shadow: 0 0 15px #ff69b4, 0 0 20px #fff; }
+            100% { text-shadow: 0 0 5px #ffb6c1; }
         }
 
-        .typed-text {
-            font-size: 1.4rem;
-            min-height: 40px;
-            color: #70d6ff;
-            margin-bottom: 40px;
+        /* 保证音频控件不可见但可访问 */
+        #bg-music {
+            display: none;  /* 隐藏默认控件，我们用JS控制 */
         }
 
-        .section {
-            padding: 80px 0;
-            position: relative;
-        }
-
-        .section-title {
-            font-size: 2.2rem;
-            text-align: center;
-            margin-bottom: 50px;
-            color: #70d6ff;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, #ff7b00, #ffaa00);
-            margin: 15px auto;
-            border-radius: 2px;
-        }
-
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
-        }
-
-        .tech-card {
-            background: rgba(16, 18, 47, 0.7);
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 123, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .tech-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, #ff7b00, #ffaa00);
-        }
-
-        .tech-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(255, 123, 0, 0.4);
-            border-color: #ff7b00;
-        }
-
-        .tech-icon {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #ffaa00;
-        }
-
-        .tech-name {
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-
-        .tech-desc {
-            color: #a0a0ff;
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        .interests-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .interest-item {
-            background: rgba(16, 18, 47, 0.7);
-            padding: 15px 25px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            color: #ffaa00;
-            border: 1px solid rgba(255, 123, 0, 0.3);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-        }
-
-        .interest-item:hover {
-            background: rgba(255, 123, 0, 0.2);
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 123, 0, 0.5);
-        }
-
-        .goals-container {
-            background: rgba(16, 18, 47, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 30px;
-            border: 1px solid rgba(255, 123, 0, 0.3);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-        }
-
-        .goal-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid rgba(255, 123, 0, 0.2);
-        }
-
-        .goal-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .goal-icon {
-            font-size: 1.8rem;
-            margin-right: 20px;
-            color: #ff7b00;
-            min-width: 50px;
-        }
-
-        .goal-content h3 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            color: #ffaa00;
-        }
-
-        .goal-content p {
-            color: #a0a0ff;
-            line-height: 1.6;
-        }
-
-        footer {
-            background: rgba(10, 12, 30, 0.9);
-            padding: 50px 0 25px;
-            text-align: center;
-            border-top: 1px solid rgba(255, 123, 0, 0.3);
-        }
-
-        .contact-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn-github {
-            background: linear-gradient(45deg, #ff7b00, #ffaa00);
-            color: white;
-        }
-
-        .btn-email {
-            background: linear-gradient(45deg, #ffaa00, #ffcc00);
-            color: white;
-        }
-
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 123, 0, 0.4);
-        }
-
-        .copyright {
-            color: #a0a0ff;
-            margin-top: 30px;
+        /* 提示语 “轻触播放音乐” 在未播放前可显示? 但我们将用静音自动播放+触摸取消静音 以达到最快有声音 */
+        .hint {
             font-size: 0.9rem;
+            color: #a5384e;
+            background: #ffe2ebdd;
+            padding: 0.3rem 1.2rem;
+            border-radius: 50px;
+            margin: 0.6rem auto 0;
+            width: fit-content;
+            border: 1px solid #ffb6c1;
         }
 
-        /* 流星样式 */
-        .meteor {
-            position: fixed;
-            top: 0;
-            width: 2px;
-            height: 2px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 2px #fff;
-            z-index: -1;
-            opacity: 0;
-        }
-
-        /* 波纹效果 */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6);
-            transform: scale(0);
-            animation: ripple-animation 0.6s linear;
-        }
-
-        @keyframes ripple-animation {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        /* 移动端优化 */
-        @media (max-width: 768px) {
-            .name {
-                font-size: 2.5rem;
-            }
-            
-            .title {
-                font-size: 1.3rem;
-            }
-            
-            .typed-text {
-                font-size: 1.2rem;
-            }
-            
-            .section-title {
-                font-size: 1.8rem;
-            }
-            
-            .tech-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .contact-buttons {
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
-            }
-            
-            .btn {
-                width: 80%;
-                max-width: 250px;
-            }
-            
-            .interest-item {
-                padding: 12px 20px;
-                font-size: 1rem;
-            }
-            
-            .goals-container {
-                padding: 20px;
-            }
-            
-            .goal-item {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .goal-icon {
-                margin-right: 0;
-                margin-bottom: 15px;
-            }
-            
-            header {
-                padding: 80px 0 40px;
-                min-height: 80vh;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .name {
-                font-size: 2rem;
-            }
-            
-            .title {
-                font-size: 1.1rem;
-            }
-            
-            .typed-text {
-                font-size: 1rem;
-            }
-            
-            .section-title {
-                font-size: 1.6rem;
-            }
-            
-            .tech-card {
-                padding: 20px;
-            }
-            
-            .interest-item {
-                padding: 10px 18px;
-                font-size: 0.9rem;
-            }
-        }
-
-        /* 防止移动端点击延迟 */
-        * {
-            -webkit-tap-highlight-color: transparent;
+        /* 底部小心思 */
+        .footer {
+            margin-top: 1.5rem;
+            color: #ad4d64;
+            font-size: 1rem;
         }
     </style>
 </head>
 <body>
-    <!-- Three.js星空背景 -->
-    <div id="starfield"></div>
-    
-    <!-- 粒子背景 -->
-    <div id="particles-js"></div>
-    
-    <!-- 流星容器 -->
-    <div id="meteors-container"></div>
-    
-    <div class="container">
-        <header>
-            <h1 class="name" data-aos="fade-down">小橙</h1>
-            <h2 class="title" data-aos="fade-up" data-aos-delay="200">Java中级程序员 & 后端开发工程师</h2>
-            <div class="typed-text" id="typed-text" data-aos="fade-up" data-aos-delay="400"></div>
-        </header>
-        
-        <section class="section" id="tech-stack">
-            <h2 class="section-title" data-aos="fade-up">技术栈</h2>
-            <div class="tech-grid">
-                <div class="tech-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="tech-icon">☕</div>
-                    <h3 class="tech-name">Java核心</h3>
-                    <p class="tech-desc">Java SE 8/11, 多线程, 集合框架, JVM原理, 设计模式, 数据结构与算法</p>
-                </div>
-                <div class="tech-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="tech-icon">🌱</div>
-                    <h3 class="tech-name">Spring生态</h3>
-                    <p class="tech-desc">Spring Boot, Spring MVC, Spring Cloud, Spring Security, MyBatis</p>
-                </div>
-                <div class="tech-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="tech-icon">🗄️</div>
-                    <h3 class="tech-name">数据库技术</h3>
-                    <p class="tech-desc">MySQL, Redis, MongoDB, 数据库优化, 索引设计, 事务管理</p>
-                </div>
-                <div class="tech-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="tech-icon">🔗</div>
-                    <h3 class="tech-name">中间件与架构</h3>
-                    <p class="tech-desc">微服务架构, Docker, RabbitMQ, Nginx, 分布式系统设计</p>
-                </div>
+
+    <!-- 背景无数粉嫩花朵 (盛开浮动) 用JS生成随机位置和样式，更鲜活 -->
+    <div class="flower-bg" id="flowerBg"></div>
+
+    <!-- 主卡片 -->
+    <div class="birthday-card">
+        <div class="age">26岁</div>
+        <div class="sub">✨ 雯雯 生日快乐 ✨</div>
+
+        <!-- 蜡烛区域（双击熄灭） -->
+        <div class="candle-wrapper" id="candleTouchArea">
+            <div class="candle" id="candle">
+                <div class="flame"></div>
+                <div class="wick"></div>
+                <div class="candle-body"></div>
+                <div class="candle-base"></div>
             </div>
-        </section>
-        
-        <section class="section" id="interests">
-            <h2 class="section-title" data-aos="fade-up">研究方向</h2>
-            <div class="interests-container">
-                <div class="interest-item" data-aos="zoom-in" data-aos-delay="100">微服务架构设计</div>
-                <div class="interest-item" data-aos="zoom-in" data-aos-delay="200">高并发系统优化</div>
-                <div class="interest-item" data-aos="zoom-in" data-aos-delay="300">云原生应用开发</div>
-                <div class="interest-item" data-aos="zoom-in" data-aos-delay="400">分布式事务解决方案</div>
-                <div class="interest-item" data-aos="zoom-in" data-aos-delay="500">JVM性能调优</div>
-                <div class="interest-item" data-aos="zoom-in" data-aos-delay="600">系统稳定性保障</div>
-            </div>
-        </section>
-        
-        <section class="section" id="goals">
-            <h2 class="section-title" data-aos="fade-up">职业意向</h2>
-            <div class="goals-container" data-aos="fade-up">
-                <div class="goal-item">
-                    <div class="goal-icon">💼</div>
-                    <div class="goal-content">
-                        <h3>目标岗位</h3>
-                        <p>Java中级开发工程师 / 后端开发工程师 / 微服务架构师 / 系统架构师</p>
-                    </div>
-                </div>
-                <div class="goal-item">
-                    <div class="goal-icon">🎯</div>
-                    <div class="goal-content">
-                        <h3>职业目标</h3>
-                        <p>致力于构建高可用、高并发的分布式系统，深入研究Java生态与技术架构，成为全栈式后端开发专家。</p>
-                    </div>
-                </div>
-                <div class="goal-item">
-                    <div class="goal-icon">🌟</div>
-                    <div class="goal-content">
-                        <h3>期望贡献</h3>
-                        <p>在微服务架构、系统性能优化和稳定性保障方面做出突破，解决复杂业务场景下的技术挑战。</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <footer>
-            <div class="contact-buttons">
-                <a href="https://github.com/smallOrangei" class="btn btn-github" target="_blank">
-                    GitHub 主页
-                </a>
-                <a href="mailto:orangeweni@outlook.com" class="btn btn-email">
-                    联系我
-                </a>
-            </div>
-            <p class="copyright">© <span id="current-year"></span> 小橙 | 代码如诗，架构如画</p>
-        </footer>
+        </div>
+
+        <!-- 音乐小标志，同时显示正在播放/待播放状态 -->
+        <div class="music-tip" id="musicIcon">🎵 🎶 🎵</div>
+        <div class="hint" id="interactHint">✨ 轻触屏幕 唤醒音乐 ✨</div>
+        <div class="footer">🌸 双击蜡烛 许愿花漾 🌸</div>
     </div>
 
+    <!-- 音频元素 (预加载，静音自动播放尝试，之后通过触摸取消静音) -->
+    <audio id="bg-music" loop playsinline preload="auto" crossorigin="anonymous">
+        <!-- 使用Google sounds公共生日歌(ogg)，兼容大多数浏览器 -->
+        <source src="https://actions.google.com/sounds/v1/holidays/happy_birthday_song.ogg" type="audio/ogg">
+        <!-- 后备简单音调，但基本没问题，如果不支持会静音，用户触摸依然可以尝试播放 -->
+        Your browser does not support the audio element.
+    </audio>
+
     <script>
-        // 初始化AOS动画库
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 100
-        });
+        (function() {
+            // 防止移动端双击缩放 / 长按菜单 (针对蜡烛区域)
+            const candleDiv = document.getElementById('candle');
+            const candleWrapper = document.getElementById('candleTouchArea');
 
-        // 初始化Typed.js
-        var typed = new Typed('#typed-text', {
-            strings: [
-                "探索Java技术深度",
-                "构建高可用分布式系统",
-                "研究微服务与云原生",
-                "优化系统性能与稳定性"
-            ],
-            typeSpeed: 60,
-            backSpeed: 30,
-            backDelay: 2000,
-            loop: true,
-            showCursor: true,
-            cursorChar: '|'
-        });
-
-        // 设置当前年份
-        document.getElementById('current-year').textContent = new Date().getFullYear();
-
-        // Three.js星空背景
-        let scene, camera, renderer, stars = [];
-
-        function initThree() {
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.getElementById('starfield').appendChild(renderer.domElement);
-
-            // 创建星星
-            for (let i = 0; i < 3000; i++) {
-                const star = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.1, 24, 24),
-                    new THREE.MeshBasicMaterial({ color: 0xffffff })
-                );
-                
-                const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(2000));
-                star.position.set(x, y, z);
-                scene.add(star);
-                stars.push(star);
+            // ---- 初始化鲜花背景 (40朵随机粉嫩花) ----
+            const flowerContainer = document.getElementById('flowerBg');
+            const flowerTypes = ['🌸', '🌷', '🌺', '🌼', '🪷', '🌸', '🌸', '🌹', '🌸', '🌻']; // 大部分是樱花桃花
+            for (let i = 0; i < 42; i++) {
+                const flower = document.createElement('div');
+                flower.className = 'flower';
+                // 随机选择类型
+                const type = flowerTypes[Math.floor(Math.random() * flowerTypes.length)];
+                flower.textContent = type;  // 使用字符直接展示
+                // 随机位置
+                const left = Math.random() * 100; // vw
+                const top = Math.random() * 100;   // vh
+                flower.style.left = left + '%';
+                flower.style.top = top + '%';
+                // 随机大小
+                const scale = 0.7 + Math.random() * 1.2;
+                flower.style.fontSize = (1.2 * scale) + 'rem';
+                // 随机动画延迟 营造错落感
+                const delay = Math.random() * 5;
+                flower.style.animationDelay = delay + 's';
+                // 随机透明度
+                flower.style.opacity = 0.5 + Math.random() * 0.4;
+                // 加一点旋转
+                flower.style.transform = `rotate(${Math.random() * 30}deg)`;
+                flowerContainer.appendChild(flower);
             }
 
-            camera.position.z = 1;
+            // ------- 蜡烛双击熄灭逻辑 (移动端双击/PC双击) -------
+            let lastTouchTime = 0;
+            const DOUBLE_TAP_DELAY = 300; // 毫秒
 
-            animateStars();
-        }
-
-        function animateStars() {
-            requestAnimationFrame(animateStars);
-            
-            stars.forEach(star => {
-                star.position.z += 0.5;
-                if (star.position.z > 1000) {
-                    star.position.z = -1000;
+            // 自定义双击处理 (针对移动端touch)
+            function handleDoubleTap(e) {
+                e.preventDefault();  // 阻止任何页面缩放或滚动干扰
+                const currentTime = new Date().getTime();
+                if (lastTouchTime && (currentTime - lastTouchTime) < DOUBLE_TAP_DELAY) {
+                    // 双击触发熄灭
+                    toggleCandleOff();
+                    lastTouchTime = 0; // 重置，避免三次点击再次触发
+                } else {
+                    lastTouchTime = currentTime;
                 }
-                
-                // 添加闪烁效果
-                star.material.opacity = 0.5 + 0.5 * Math.sin(Date.now() * 0.001 + star.position.x);
-            });
-            
-            renderer.render(scene, camera);
-        }
-
-        // 窗口大小变化时更新
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // 初始化Three.js
-        initThree();
-
-        // 初始化Particles.js
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 60, density: { enable: true, value_area: 800 } },
-                color: { value: "#ff7b00" },
-                shape: { type: "circle" },
-                opacity: {
-                    value: 0.5,
-                    random: true,
-                    anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
-                },
-                size: {
-                    value: 3,
-                    random: true,
-                    anim: { enable: true, speed: 2, size_min: 0.1, sync: false }
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: "#ffaa00",
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 1,
-                    direction: "none",
-                    random: true,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false,
-                    attract: { enable: false, rotateX: 600, rotateY: 1200 }
-                }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: { enable: true, mode: "repulse" },
-                    onclick: { enable: true, mode: "push" },
-                    resize: true
-                },
-                modes: {
-                    repulse: { distance: 100, duration: 0.4 },
-                    push: { particles_nb: 4 }
-                }
-            },
-            retina_detect: true
-        });
-
-        // 流星效果
-        function createMeteor() {
-            const meteor = document.createElement('div');
-            meteor.className = 'meteor';
-            
-            // 随机位置和大小
-            const left = Math.random() * 100;
-            const top = Math.random() * 50;
-            const size = Math.random() * 2 + 1;
-            
-            meteor.style.left = `${left}vw`;
-            meteor.style.top = `${top}vh`;
-            meteor.style.width = `${size}px`;
-            meteor.style.height = `${size}px`;
-            
-            document.getElementById('meteors-container').appendChild(meteor);
-            
-            // 流星动画
-            anime({
-                targets: meteor,
-                translateX: ['0vw', '100vw'],
-                translateY: ['0vh', '100vh'],
-                opacity: [0, 1, 0],
-                duration: Math.random() * 3000 + 2000,
-                easing: 'linear',
-                complete: function() {
-                    meteor.remove();
-                    // 创建新的流星
-                    setTimeout(createMeteor, Math.random() * 5000);
-                }
-            });
-        }
-        
-        // 初始化一些流星
-        for (let i = 0; i < 5; i++) {
-            setTimeout(createMeteor, Math.random() * 5000);
-        }
-
-        // 添加卡片悬停动画
-        document.querySelectorAll('.tech-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                anime({
-                    targets: this,
-                    scale: 1.05,
-                    duration: 300,
-                    easing: 'easeOutCubic'
-                });
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                anime({
-                    targets: this,
-                    scale: 1,
-                    duration: 300,
-                    easing: 'easeOutCubic'
-                });
-            });
-        });
-
-        // 添加按钮点击动画
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                // 创建点击波纹效果
-                const ripple = document.createElement('span');
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
-                
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = x + 'px';
-                ripple.style.top = y + 'px';
-                ripple.classList.add('ripple');
-                
-                this.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-            });
-        });
-
-        // 添加滚动视差效果
-        window.addEventListener('scroll', function() {
-            const scrolled = window.pageYOffset;
-            const parallax = document.querySelector('#starfield');
-            if (parallax) {
-                parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
             }
-        });
+
+            // 同时监听鼠标双击 (便于开发环境)
+            function handleDblClick(e) {
+                e.preventDefault();
+                toggleCandleOff();
+            }
+
+            // 熄灭火焰
+            function toggleCandleOff() {
+                if (!candleDiv.classList.contains('extinguished')) {
+                    candleDiv.classList.add('extinguished');
+                    // 可添加细微触感 (可选震动，但不需要)
+                }
+                // 如果已经熄灭，不重复操作 (根据需求双击就熄灭，不需要再点燃)
+            }
+
+            // 添加事件监听: touchstart 用于模拟双击，并且禁止默认
+            candleWrapper.addEventListener('touchstart', handleDoubleTap, { passive: false });
+            candleWrapper.addEventListener('dblclick', handleDblClick); // PC端
+
+            // 阻止所有在蜡烛区域内的click默认行为（无伤大雅）
+            candleWrapper.addEventListener('click', (e) => e.preventDefault());
+
+            // ----- 音乐自动播放 & 手势唤醒 (静默自动播放静音，触摸后有声) -----
+            const audio = document.getElementById('bg-music');
+            const musicIcon = document.getElementById('musicIcon');
+            const hintEl = document.getElementById('interactHint');
+
+            // 设置初始状态：静音尝试自动播放 (由于muted=true, 大多数浏览器允许自动播放)
+            audio.muted = true;
+            audio.volume = 0.6; // 设置合适音量
+
+            // 尝试播放 (如果成功，则静音播放，用户触摸后关闭静音)
+            let playPromise = audio.play();
+
+            // 标记是否已经通过用户手势取消静音 (避免重复)
+            let userUnmuted = false;
+
+            function unmuteAndPlay() {
+                if (userUnmuted) return;
+                userUnmuted = true;
+
+                // 关闭静音
+                audio.muted = false;
+                // 如果音频因某些原因暂停，则重新播放
+                if (audio.paused) {
+                    audio.play().catch(e => console.log('play after unmute failed', e));
+                }
+                // 改变提示语样式
+                musicIcon.style.opacity = '1';
+                musicIcon.style.animation = 'softGlow 1.2s infinite';
+                hintEl.textContent = '🎵 生日歌轻响 · 愿你快乐 🎵';
+                hintEl.style.background = '#ffd9e6';
+            }
+
+            // 如果自动播放失败（比如非静音自动播放被阻止，但我们设置muted应该成功），静音播放没问题
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("静音自动播放失败（极少见）, 等待用户触摸: ", error);
+                    // 静音播放失败的话，我们只能等待用户手势再播放（这时候尝试播放不带静音）
+                    // 添加一次性手势播放
+                });
+            }
+
+            // 监听用户第一次触摸任何地方 (一旦触摸就取消静音)
+            function firstTouchHandler(e) {
+                // 避免蜡烛双击触发时重复处理，但没关系
+                if (!userUnmuted) {
+                    unmuteAndPlay();
+                }
+                // 移除监听 (只需触发一次)
+                document.removeEventListener('touchstart', firstTouchHandler);
+                document.removeEventListener('click', firstTouchHandler); // 也为PC准备
+            }
+
+            // 如果自动静音播放已经成功，但用户未取消静音，仍需要手势取消静音
+            // 如果播放失败，一样需要手势播放。
+            document.addEventListener('touchstart', firstTouchHandler, { passive: true, once: false });
+            document.addEventListener('click', firstTouchHandler, { passive: true, once: false }); // 兼顾PC
+
+            // 但假如音频一开始就 unmuted? 我们保持muted，只有手势后 unmute.
+            // 同时为了更优雅: 如果音频从未播放(因为自动播放策略严格), 触摸时直接播放非静音。
+            // 改进: 若audio.paused 为真，则直接调用play (同时取消静音)
+            const originalUnmute = unmuteAndPlay;
+            unmuteAndPlay = function() {
+                if (userUnmuted) return;
+                userUnmuted = true;
+                audio.muted = false;
+                audio.play().then(() => {
+                    console.log('音乐已通过手势播放');
+                }).catch(e => {
+                    console.log('音乐播放失败，请再次尝试', e);
+                    // 降级: 提示用户手动点击音乐图标
+                    hintEl.textContent = '点击音符播放音乐';
+                });
+                musicIcon.style.opacity = '1';
+                hintEl.textContent = '🎶 生日快乐 永远少女 🎶';
+            };
+
+            // 重新赋值
+            document.removeEventListener('touchstart', firstTouchHandler);
+            document.removeEventListener('click', firstTouchHandler);
+            // 重新绑定新的unmute函数
+            document.addEventListener('touchstart', function onFirstTouch(e) {
+                if (!userUnmuted) {
+                    audio.muted = false;
+                    audio.play().catch(err => hintEl.textContent = '再点一下音符播放');
+                }
+                userUnmuted = true; // 标记已响应
+                document.removeEventListener('touchstart', onFirstTouch);
+                document.removeEventListener('click', onFirstClick);
+            }, { passive: true });
+            document.addEventListener('click', function onFirstClick(e) {
+                if (!userUnmuted) {
+                    audio.muted = false;
+                    audio.play().catch(err => hintEl.textContent = '点击音符播放');
+                }
+                userUnmuted = true;
+                document.removeEventListener('click', onFirstClick);
+                document.removeEventListener('touchstart', onFirstTouch);
+            }, { passive: true });
+
+            // 另外，如果用户双击蜡烛时可能也触发了第一次触摸，音乐就响了，很自然。
+            // 音乐图标本身也可以作为最后备用的手动触发
+            musicIcon.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (!userUnmuted) {
+                    audio.muted = false;
+                    audio.play().then(() => {
+                        hintEl.textContent = '🎵 生日快乐 26岁 🎵';
+                    }).catch(() => {
+                        hintEl.textContent = '请稍后再点';
+                    });
+                    userUnmuted = true;
+                } else {
+                    // 如果已经播放，但可能暂停？可以重新播放
+                    if (audio.paused) {
+                        audio.play();
+                    }
+                }
+            });
+
+            // 额外细节: 如果音频一直未能播放，提示用户点击音符
+            // 加载完成一次后，确保有 src
+            audio.load(); // 重新加载以确保
+
+            // 设置音量合适
+            audio.volume = 0.5;
+
+            // 为了更加符合粉嫩主题，在熄灭蜡烛时悄悄加上一句祝福（可选）
+            // 但不需要额外逻辑
+        })();
     </script>
+
+    <!-- 一小段内联样式微调确保花朵都能看见 -->
+    <style>
+        /* 确保花朵字体是emoji彩色 */
+        .flower {
+            font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Android Emoji', 'EmojiOne Color', 'Twemoji Mozilla', sans-serif;
+        }
+        /* 让卡片更粉润 */
+        .birthday-card {
+            border: 3px solid #ffb7c5;
+            background: rgba(255, 230, 240, 0.6);
+        }
+        /* 增强双击区域提示 */
+        .candle-wrapper {
+            border-radius: 80px;
+            padding: 10px;
+        }
+        /* 小屏幕适配 */
+        @media (max-width: 480px) {
+            .age { font-size: 3.8rem; }
+            .candle-body { width: 70px; height: 140px; }
+            .candle { width: 100px; height: 200px; }
+            .candle-base { width: 100px; }
+        }
+    </style>
 </body>
 </html>
