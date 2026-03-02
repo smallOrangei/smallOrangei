@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小橙 | Java中级程序员</title>
+    <!-- Three.js 3D图形库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Anime.js 动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <!-- Typed.js 打字效果 -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <!-- AOS 滚动动画 -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Particles.js 粒子效果 -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #0a0a2a;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            touch-action: manipulation;
+        }
+
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 100px 0 60px;
+            text-align: center;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .name {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff7b00, #ffaa00, #ffcc00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(255, 123, 0, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .title {
+            font-size: 1.6rem;
+            margin-bottom: 30px;
+            color: #a0a0ff;
+        }
+
+        .typed-text {
+            font-size: 1.4rem;
+            min-height: 40px;
+            color: #70d6ff;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #70d6ff;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff7b00, #ffaa00);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .tech-card {
+            background: rgba(16, 18, 47, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 123, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .tech-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #ff7b00, #ffaa00);
+        }
+
+        .tech-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(255, 123, 0, 0.4);
+            border-color: #ff7b00;
+        }
+
+        .tech-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffaa00;
+        }
+
+        .tech-name {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .tech-desc {
+            color: #a0a0ff;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .interests-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .interest-item {
+            background: rgba(16, 18, 47, 0.7);
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            color: #ffaa00;
+            border: 1px solid rgba(255, 123, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .interest-item:hover {
+            background: rgba(255, 123, 0, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 123, 0, 0.5);
+        }
+
+        .goals-container {
+            background: rgba(16, 18, 47, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid rgba(255, 123, 0, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .goal-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 123, 0, 0.2);
+        }
+
+        .goal-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .goal-icon {
+            font-size: 1.8rem;
+            margin-right: 20px;
+            color: #ff7b00;
+            min-width: 50px;
+        }
+
+        .goal-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #ffaa00;
+        }
+
+        .goal-content p {
+            color: #a0a0ff;
+            line-height: 1.6;
+        }
+
+        footer {
+            background: rgba(10, 12, 30, 0.9);
+            padding: 50px 0 25px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 123, 0, 0.3);
+        }
+
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-github {
+            background: linear-gradient(45deg, #ff7b00, #ffaa00);
+            color: white;
+        }
+
+        .btn-email {
+            background: linear-gradient(45deg, #ffaa00, #ffcc00);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 123, 0, 0.4);
+        }
+
+        .copyright {
+            color: #a0a0ff;
+            margin-top: 30px;
+            font-size: 0.9rem;
+        }
+
+        /* 流星样式 */
+        .meteor {
+            position: fixed;
+            top: 0;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 2px #fff;
+            z-index: -1;
+            opacity: 0;
+        }
+
+        /* 波纹效果 */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .name {
+                font-size: 2.5rem;
+            }
+            
+            .title {
+                font-size: 1.3rem;
+            }
+            
+            .typed-text {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .tech-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .contact-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 80%;
+                max-width: 250px;
+            }
+            
+            .interest-item {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            .goals-container {
+                padding: 20px;
+            }
+            
+            .goal-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .goal-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            header {
+                padding: 80px 0 40px;
+                min-height: 80vh;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .name {
+                font-size: 2rem;
+            }
+            
+            .title {
+                font-size: 1.1rem;
+            }
+            
+            .typed-text {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .tech-card {
+                padding: 20px;
+            }
+            
+            .interest-item {
+                padding: 10px 18px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* 防止移动端点击延迟 */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <!-- Three.js星空背景 -->
+    <div id="starfield"></div>
+    
+    <!-- 粒子背景 -->
+    <div id="particles-js"></div>
+    
+    <!-- 流星容器 -->
+    <div id="meteors-container"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="name" data-aos="fade-down">小橙</h1>
+            <h2 class="title" data-aos="fade-up" data-aos-delay="200">Java中级程序员 & 后端开发工程师</h2>
+            <div class="typed-text" id="typed-text" data-aos="fade-up" data-aos-delay="400"></div>
+        </header>
+        
+        <section class="section" id="tech-stack">
+            <h2 class="section-title" data-aos="fade-up">技术栈</h2>
+            <div class="tech-grid">
+                <div class="tech-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="tech-icon">☕</div>
+                    <h3 class="tech-name">Java核心</h3>
+                    <p class="tech-desc">Java SE 8/11, 多线程, 集合框架, JVM原理, 设计模式, 数据结构与算法</p>
+                </div>
+                <div class="tech-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="tech-icon">🌱</div>
+                    <h3 class="tech-name">Spring生态</h3>
+                    <p class="tech-desc">Spring Boot, Spring MVC, Spring Cloud, Spring Security, MyBatis</p>
+                </div>
+                <div class="tech-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="tech-icon">🗄️</div>
+                    <h3 class="tech-name">数据库技术</h3>
+                    <p class="tech-desc">MySQL, Redis, MongoDB, 数据库优化, 索引设计, 事务管理</p>
+                </div>
+                <div class="tech-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="tech-icon">🔗</div>
+                    <h3 class="tech-name">中间件与架构</h3>
+                    <p class="tech-desc">微服务架构, Docker, RabbitMQ, Nginx, 分布式系统设计</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section" id="interests">
+            <h2 class="section-title" data-aos="fade-up">研究方向</h2>
+            <div class="interests-container">
+                <div class="interest-item" data-aos="zoom-in" data-aos-delay="100">微服务架构设计</div>
+                <div class="interest-item" data-aos="zoom-in" data-aos-delay="200">高并发系统优化</div>
+                <div class="interest-item" data-aos="zoom-in" data-aos-delay="300">云原生应用开发</div>
+                <div class="interest-item" data-aos="zoom-in" data-aos-delay="400">分布式事务解决方案</div>
+                <div class="interest-item" data-aos="zoom-in" data-aos-delay="500">JVM性能调优</div>
+                <div class="interest-item" data-aos="zoom-in" data-aos-delay="600">系统稳定性保障</div>
+            </div>
+        </section>
+        
+        <section class="section" id="goals">
+            <h2 class="section-title" data-aos="fade-up">职业意向</h2>
+            <div class="goals-container" data-aos="fade-up">
+                <div class="goal-item">
+                    <div class="goal-icon">💼</div>
+                    <div class="goal-content">
+                        <h3>目标岗位</h3>
+                        <p>Java中级开发工程师 / 后端开发工程师 / 微服务架构师 / 系统架构师</p>
+                    </div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-icon">🎯</div>
+                    <div class="goal-content">
+                        <h3>职业目标</h3>
+                        <p>致力于构建高可用、高并发的分布式系统，深入研究Java生态与技术架构，成为全栈式后端开发专家。</p>
+                    </div>
+                </div>
+                <div class="goal-item">
+                    <div class="goal-icon">🌟</div>
+                    <div class="goal-content">
+                        <h3>期望贡献</h3>
+                        <p>在微服务架构、系统性能优化和稳定性保障方面做出突破，解决复杂业务场景下的技术挑战。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <div class="contact-buttons">
+                <a href="https://github.com/smallOrangei" class="btn btn-github" target="_blank">
+                    GitHub 主页
+                </a>
+                <a href="mailto:orangeweni@outlook.com" class="btn btn-email">
+                    联系我
+                </a>
+            </div>
+            <p class="copyright">© <span id="current-year"></span> 小橙 | 代码如诗，架构如画</p>
+        </footer>
+    </div>
+
+    <script>
+        // 初始化AOS动画库
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // 初始化Typed.js
+        var typed = new Typed('#typed-text', {
+            strings: [
+                "探索Java技术深度",
+                "构建高可用分布式系统",
+                "研究微服务与云原生",
+                "优化系统性能与稳定性"
+            ],
+            typeSpeed: 60,
+            backSpeed: 30,
+            backDelay: 2000,
+            loop: true,
+            showCursor: true,
+            cursorChar: '|'
+        });
+
+        // 设置当前年份
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Three.js星空背景
+        let scene, camera, renderer, stars = [];
+
+        function initThree() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('starfield').appendChild(renderer.domElement);
+
+            // 创建星星
+            for (let i = 0; i < 3000; i++) {
+                const star = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.1, 24, 24),
+                    new THREE.MeshBasicMaterial({ color: 0xffffff })
+                );
+                
+                const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(2000));
+                star.position.set(x, y, z);
+                scene.add(star);
+                stars.push(star);
+            }
+
+            camera.position.z = 1;
+
+            animateStars();
+        }
+
+        function animateStars() {
+            requestAnimationFrame(animateStars);
+            
+            stars.forEach(star => {
+                star.position.z += 0.5;
+                if (star.position.z > 1000) {
+                    star.position.z = -1000;
+                }
+                
+                // 添加闪烁效果
+                star.material.opacity = 0.5 + 0.5 * Math.sin(Date.now() * 0.001 + star.position.x);
+            });
+            
+            renderer.render(scene, camera);
+        }
+
+        // 窗口大小变化时更新
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // 初始化Three.js
+        initThree();
+
+        // 初始化Particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 60, density: { enable: true, value_area: 800 } },
+                color: { value: "#ff7b00" },
+                shape: { type: "circle" },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                    anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: { enable: true, speed: 2, size_min: 0.1, sync: false }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#ffaa00",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false,
+                    attract: { enable: false, rotateX: 600, rotateY: 1200 }
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "repulse" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                },
+                modes: {
+                    repulse: { distance: 100, duration: 0.4 },
+                    push: { particles_nb: 4 }
+                }
+            },
+            retina_detect: true
+        });
+
+        // 流星效果
+        function createMeteor() {
+            const meteor = document.createElement('div');
+            meteor.className = 'meteor';
+            
+            // 随机位置和大小
+            const left = Math.random() * 100;
+            const top = Math.random() * 50;
+            const size = Math.random() * 2 + 1;
+            
+            meteor.style.left = `${left}vw`;
+            meteor.style.top = `${top}vh`;
+            meteor.style.width = `${size}px`;
+            meteor.style.height = `${size}px`;
+            
+            document.getElementById('meteors-container').appendChild(meteor);
+            
+            // 流星动画
+            anime({
+                targets: meteor,
+                translateX: ['0vw', '100vw'],
+                translateY: ['0vh', '100vh'],
+                opacity: [0, 1, 0],
+                duration: Math.random() * 3000 + 2000,
+                easing: 'linear',
+                complete: function() {
+                    meteor.remove();
+                    // 创建新的流星
+                    setTimeout(createMeteor, Math.random() * 5000);
+                }
+            });
+        }
+        
+        // 初始化一些流星
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createMeteor, Math.random() * 5000);
+        }
+
+        // 添加卡片悬停动画
+        document.querySelectorAll('.tech-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                anime({
+                    targets: this,
+                    scale: 1.05,
+                    duration: 300,
+                    easing: 'easeOutCubic'
+                });
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                anime({
+                    targets: this,
+                    scale: 1,
+                    duration: 300,
+                    easing: 'easeOutCubic'
+                });
+            });
+        });
+
+        // 添加按钮点击动画
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // 创建点击波纹效果
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // 添加滚动视差效果
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('#starfield');
+            if (parallax) {
+                parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
