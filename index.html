@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>小橙 | Java中级程序员</title>
+    <!-- 可爱橙子 favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍊</text></svg>">
     <!-- Three.js 3D图形库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Anime.js 动画库 -->
@@ -16,15 +18,26 @@
     <!-- Particles.js 粒子效果 -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
+        :root {
+            --primary: #ff7b00;
+            --secondary: #ffaa00;
+            --accent: #ffcc00;
+            --bg-dark: #0a0a2a;
+            --card-bg: rgba(16, 18, 47, 0.75);
+            --text-light: #e0e0ff;
+            --text-muted: #a0a0ff;
+            --border-glow: rgba(255, 123, 0, 0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
         }
 
         body {
-            background: #0a0a2a;
+            background: var(--bg-dark);
             color: #fff;
             overflow-x: hidden;
             min-height: 100vh;
@@ -49,14 +62,56 @@
             z-index: -1;
         }
 
+        /* 光晕背景装饰 */
+        .glow-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: -3;
+            pointer-events: none;
+            animation: floatOrb 20s infinite alternate ease-in-out;
+        }
+        .glow-orb:nth-child(1) {
+            width: 500px;
+            height: 500px;
+            background: #ff7b00;
+            top: -150px;
+            left: -150px;
+        }
+        .glow-orb:nth-child(2) {
+            width: 600px;
+            height: 600px;
+            background: #4a00e0;
+            bottom: -200px;
+            right: -200px;
+            animation-delay: -10s;
+        }
+        .glow-orb:nth-child(3) {
+            width: 400px;
+            height: 400px;
+            background: #ffaa00;
+            top: 40%;
+            left: 60%;
+            animation-delay: -5s;
+        }
+
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(50px, -30px) scale(1.1); }
+            100% { transform: translate(-30px, 40px) scale(0.95); }
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
 
         header {
-            padding: 100px 0 60px;
+            padding: 120px 0 80px;
             text-align: center;
             position: relative;
             min-height: 100vh;
@@ -66,28 +121,82 @@
         }
 
         .name {
-            font-size: 3.5rem;
+            font-size: 4rem;
             font-weight: 800;
-            background: linear-gradient(45deg, #ff7b00, #ffaa00, #ffcc00);
+            background: linear-gradient(45deg, #ff7b00, #ffaa00, #ffcc00, #ff7b00);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             margin-bottom: 20px;
-            text-shadow: 0 0 15px rgba(255, 123, 0, 0.5);
-            letter-spacing: 2px;
+            text-shadow: 0 0 25px rgba(255, 123, 0, 0.4);
+            letter-spacing: 3px;
+            animation: gradientShift 6s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .title {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             margin-bottom: 30px;
-            color: #a0a0ff;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            font-weight: 400;
         }
 
         .typed-text {
-            font-size: 1.4rem;
-            min-height: 40px;
+            font-size: 1.6rem;
+            min-height: 45px;
             color: #70d6ff;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 12px rgba(112, 214, 255, 0.6);
+        }
+
+        /* 滚动指示器 */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            animation: bounceDown 2s infinite;
+        }
+        .scroll-indicator .mouse {
+            width: 26px;
+            height: 42px;
+            border: 2px solid var(--text-muted);
+            border-radius: 13px;
+            position: relative;
+        }
+        .scroll-indicator .mouse::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 2px;
+            animation: scrollWheel 1.5s infinite;
+        }
+        @keyframes scrollWheel {
+            0% { opacity: 1; top: 8px; }
+            100% { opacity: 0; top: 24px; }
+        }
+        @keyframes bounceDown {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
         }
 
         .section {
@@ -96,41 +205,55 @@
         }
 
         .section-title {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             text-align: center;
-            margin-bottom: 50px;
-            color: #70d6ff;
+            margin-bottom: 60px;
+            color: #fff;
             position: relative;
+            letter-spacing: 2px;
+            font-weight: 700;
         }
 
         .section-title::after {
             content: '';
             display: block;
-            width: 100px;
+            width: 120px;
             height: 4px;
-            background: linear-gradient(90deg, #ff7b00, #ffaa00);
-            margin: 15px auto;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), transparent);
+            margin: 18px auto 0;
             border-radius: 2px;
         }
 
+        /* 技术卡片网格 */
+        .tech-category {
+            margin-bottom: 50px;
+        }
+        .tech-category-title {
+            font-size: 1.6rem;
+            margin-bottom: 25px;
+            color: var(--secondary);
+            padding-left: 15px;
+            border-left: 4px solid var(--primary);
+            letter-spacing: 1px;
+        }
         .tech-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 22px;
         }
 
         .tech-card {
-            background: rgba(16, 18, 47, 0.7);
-            border-radius: 15px;
-            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 22px 18px;
             text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 123, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-glow);
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            cursor: default;
         }
 
         .tech-card::before {
@@ -139,108 +262,127 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, #ff7b00, #ffaa00);
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0.8;
+        }
+
+        .tech-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,123,0,0.15), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .tech-card:hover::after {
+            opacity: 1;
         }
 
         .tech-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(255, 123, 0, 0.4);
-            border-color: #ff7b00;
+            transform: translateY(-8px);
+            box-shadow: 0 18px 35px rgba(255, 123, 0, 0.25);
+            border-color: var(--primary);
         }
 
         .tech-icon {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #ffaa00;
+            font-size: 2.8rem;
+            margin-bottom: 18px;
+            color: var(--secondary);
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+        .tech-card:hover .tech-icon {
+            transform: scale(1.2) rotate(5deg);
         }
 
         .tech-name {
-            font-size: 1.4rem;
-            margin-bottom: 15px;
+            font-size: 1.25rem;
+            margin-bottom: 12px;
             color: #fff;
+            font-weight: 600;
         }
 
-        .tech-desc {
-            color: #a0a0ff;
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        .interests-container {
+        .tech-tags {
             display: flex;
             flex-wrap: wrap;
+            gap: 8px;
             justify-content: center;
-            gap: 15px;
+        }
+        .tech-tag {
+            background: rgba(255, 170, 0, 0.15);
+            color: var(--secondary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(255, 170, 0, 0.3);
         }
 
-        .interest-item {
-            background: rgba(16, 18, 47, 0.7);
-            padding: 15px 25px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            color: #ffaa00;
-            border: 1px solid rgba(255, 123, 0, 0.3);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
+        /* 个人能力卡片 */
+        .capability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
         }
-
-        .interest-item:hover {
-            background: rgba(255, 123, 0, 0.2);
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 123, 0, 0.5);
+        .capability-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 30px 25px;
+            border: 1px solid var(--border-glow);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s;
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
         }
-
-        .goals-container {
-            background: rgba(16, 18, 47, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            margin-top: 30px;
-            border: 1px solid rgba(255, 123, 0, 0.3);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
+        .capability-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 123, 0, 0.2);
+            border-color: var(--primary);
         }
-
-        .goal-item {
+        .capability-icon {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        .capability-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: var(--secondary);
+        }
+        .capability-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+        .capability-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+        .capability-list li {
+            padding: 6px 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid rgba(255, 123, 0, 0.2);
+            gap: 8px;
+        }
+        .capability-list li::before {
+            content: '▹';
+            color: var(--secondary);
+            font-weight: bold;
         }
 
-        .goal-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .goal-icon {
-            font-size: 1.8rem;
-            margin-right: 20px;
-            color: #ff7b00;
-            min-width: 50px;
-        }
-
-        .goal-content h3 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            color: #ffaa00;
-        }
-
-        .goal-content p {
-            color: #a0a0ff;
-            line-height: 1.6;
-        }
-
+        /* 底部 */
         footer {
-            background: rgba(10, 12, 30, 0.9);
+            background: rgba(10, 12, 30, 0.95);
             padding: 50px 0 25px;
             text-align: center;
-            border-top: 1px solid rgba(255, 123, 0, 0.3);
+            border-top: 1px solid var(--border-glow);
+            position: relative;
+            z-index: 1;
         }
-
         .contact-buttons {
             display: flex;
             justify-content: center;
@@ -248,12 +390,11 @@
             margin-bottom: 40px;
             flex-wrap: wrap;
         }
-
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 12px 25px;
+            padding: 14px 30px;
             border-radius: 50px;
             font-size: 1.1rem;
             font-weight: 600;
@@ -261,9 +402,9 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
         }
-
         .btn::before {
             content: '';
             position: absolute;
@@ -271,33 +412,25 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transition: 0.6s;
         }
-
         .btn:hover::before {
             left: 100%;
         }
-
         .btn-github {
             background: linear-gradient(45deg, #ff7b00, #ffaa00);
             color: white;
         }
-
-        .btn-email {
-            background: linear-gradient(45deg, #ffaa00, #ffcc00);
-            color: white;
-        }
-
         .btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 123, 0, 0.4);
+            box-shadow: 0 14px 28px rgba(255, 123, 0, 0.45);
         }
-
         .copyright {
-            color: #a0a0ff;
+            color: var(--text-muted);
             margin-top: 30px;
             font-size: 0.9rem;
+            letter-spacing: 1px;
         }
 
         /* 流星样式 */
@@ -308,20 +441,21 @@
             height: 2px;
             background: #fff;
             border-radius: 50%;
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 10px 2px #fff;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 12px 3px #fff;
             z-index: -1;
             opacity: 0;
+            pointer-events: none;
         }
 
         /* 波纹效果 */
         .ripple {
             position: absolute;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.5);
             transform: scale(0);
             animation: ripple-animation 0.6s linear;
+            pointer-events: none;
         }
-
         @keyframes ripple-animation {
             to {
                 transform: scale(4);
@@ -329,187 +463,429 @@
             }
         }
 
-        /* 移动端优化 */
+        /* 响应式 */
         @media (max-width: 768px) {
-            .name {
-                font-size: 2.5rem;
-            }
-            
-            .title {
-                font-size: 1.3rem;
-            }
-            
-            .typed-text {
-                font-size: 1.2rem;
-            }
-            
-            .section-title {
-                font-size: 1.8rem;
-            }
-            
-            .tech-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .contact-buttons {
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
-            }
-            
-            .btn {
-                width: 80%;
-                max-width: 250px;
-            }
-            
-            .interest-item {
-                padding: 12px 20px;
-                font-size: 1rem;
-            }
-            
-            .goals-container {
-                padding: 20px;
-            }
-            
-            .goal-item {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .goal-icon {
-                margin-right: 0;
-                margin-bottom: 15px;
-            }
-            
-            header {
-                padding: 80px 0 40px;
-                min-height: 80vh;
-            }
+            .name { font-size: 2.8rem; }
+            .title { font-size: 1.4rem; }
+            .typed-text { font-size: 1.2rem; }
+            .section-title { font-size: 2rem; }
+            .tech-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+            .capability-grid { grid-template-columns: 1fr; }
+            .btn { width: 80%; max-width: 260px; }
+            header { padding: 100px 0 60px; min-height: 90vh; }
         }
 
         @media (max-width: 480px) {
-            .name {
-                font-size: 2rem;
-            }
-            
-            .title {
-                font-size: 1.1rem;
-            }
-            
-            .typed-text {
-                font-size: 1rem;
-            }
-            
-            .section-title {
-                font-size: 1.6rem;
-            }
-            
-            .tech-card {
-                padding: 20px;
-            }
-            
-            .interest-item {
-                padding: 10px 18px;
-                font-size: 0.9rem;
-            }
-        }
-
-        /* 防止移动端点击延迟 */
-        * {
-            -webkit-tap-highlight-color: transparent;
+            .name { font-size: 2.2rem; }
+            .title { font-size: 1.1rem; }
+            .typed-text { font-size: 1rem; }
+            .tech-grid { grid-template-columns: 1fr; }
+            .tech-card { padding: 18px 14px; }
+            .capability-card { padding: 22px 18px; }
         }
     </style>
 </head>
 <body>
+    <!-- 背景光晕 -->
+    <div class="glow-orb"></div>
+    <div class="glow-orb"></div>
+    <div class="glow-orb"></div>
+
     <!-- Three.js星空背景 -->
     <div id="starfield"></div>
-    
+
     <!-- 粒子背景 -->
     <div id="particles-js"></div>
-    
+
     <!-- 流星容器 -->
     <div id="meteors-container"></div>
-    
+
     <div class="container">
         <header>
             <h1 class="name" data-aos="fade-down">小橙</h1>
             <h2 class="title" data-aos="fade-up" data-aos-delay="200">Java中级程序员 & 后端开发工程师</h2>
             <div class="typed-text" id="typed-text" data-aos="fade-up" data-aos-delay="400"></div>
+            <div class="scroll-indicator">
+                <div class="mouse"></div>
+                <span>向下探索</span>
+            </div>
         </header>
-        
+
+        <!-- 技术栈详细 -->
         <section class="section" id="tech-stack">
-            <h2 class="section-title" data-aos="fade-up">技术栈</h2>
-            <div class="tech-grid">
-                <div class="tech-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="tech-icon">☕</div>
-                    <h3 class="tech-name">Java核心</h3>
-                    <p class="tech-desc">Java SE 8/11, 多线程, 集合框架, JVM原理, 设计模式, 数据结构与算法</p>
-                </div>
-                <div class="tech-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="tech-icon">🌱</div>
-                    <h3 class="tech-name">Spring生态</h3>
-                    <p class="tech-desc">Spring Boot, Spring MVC, Spring Cloud, Spring Security, MyBatis</p>
-                </div>
-                <div class="tech-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="tech-icon">🗄️</div>
-                    <h3 class="tech-name">数据库技术</h3>
-                    <p class="tech-desc">MySQL, Redis, MongoDB, 数据库优化, 索引设计, 事务管理</p>
-                </div>
-                <div class="tech-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="tech-icon">🔗</div>
-                    <h3 class="tech-name">中间件与架构</h3>
-                    <p class="tech-desc">微服务架构, Docker, RabbitMQ, Nginx, 分布式系统设计</p>
-                </div>
-            </div>
-        </section>
-        
-        <section class="section" id="interests">
-            <h2 class="section-title" data-aos="fade-up">研究方向</h2>
-            <div class="interests-container">
-                <div class="interest-item" data-aos="zoom-in" data-aos-delay="100">微服务架构设计</div>
-                <div class="interest-item" data-aos="zoom-in" data-aos-delay="200">高并发系统优化</div>
-                <div class="interest-item" data-aos="zoom-in" data-aos-delay="300">云原生应用开发</div>
-                <div class="interest-item" data-aos="zoom-in" data-aos-delay="400">分布式事务解决方案</div>
-                <div class="interest-item" data-aos="zoom-in" data-aos-delay="500">JVM性能调优</div>
-                <div class="interest-item" data-aos="zoom-in" data-aos-delay="600">系统稳定性保障</div>
-            </div>
-        </section>
-        
-        <section class="section" id="goals">
-            <h2 class="section-title" data-aos="fade-up">职业意向</h2>
-            <div class="goals-container" data-aos="fade-up">
-                <div class="goal-item">
-                    <div class="goal-icon">💼</div>
-                    <div class="goal-content">
-                        <h3>目标岗位</h3>
-                        <p>Java中级开发工程师 / 后端开发工程师 / 微服务架构师 / 系统架构师</p>
+            <h2 class="section-title" data-aos="fade-up">技术栈全景</h2>
+
+            <div class="tech-category" data-aos="fade-up">
+                <h3 class="tech-category-title">☕ 语言</h3>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <div class="tech-icon">☕</div>
+                        <h4 class="tech-name">Java</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">集合</span>
+                            <span class="tech-tag">JUC</span>
+                            <span class="tech-tag">JVM</span>
+                            <span class="tech-tag">设计模式</span>
+                        </div>
                     </div>
-                </div>
-                <div class="goal-item">
-                    <div class="goal-icon">🎯</div>
-                    <div class="goal-content">
-                        <h3>职业目标</h3>
-                        <p>致力于构建高可用、高并发的分布式系统，深入研究Java生态与技术架构，成为全栈式后端开发专家。</p>
+                    <div class="tech-card">
+                        <div class="tech-icon">🐍</div>
+                        <h4 class="tech-name">Python</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">脚本开发</span>
+                            <span class="tech-tag">数据处理</span>
+                        </div>
                     </div>
-                </div>
-                <div class="goal-item">
-                    <div class="goal-icon">🌟</div>
-                    <div class="goal-content">
-                        <h3>期望贡献</h3>
-                        <p>在微服务架构、系统性能优化和稳定性保障方面做出突破，解决复杂业务场景下的技术挑战。</p>
+                    <div class="tech-card">
+                        <div class="tech-icon">📜</div>
+                        <h4 class="tech-name">JavaScript</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">ES6+</span>
+                            <span class="tech-tag">前端交互</span>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="tech-category" data-aos="fade-up">
+                <h3 class="tech-category-title">🌱 后端框架</h3>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <div class="tech-icon">🍃</div>
+                        <h4 class="tech-name">Spring Boot</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">微服务</span>
+                            <span class="tech-tag">自动配置</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">☁️</div>
+                        <h4 class="tech-name">Spring Cloud Alibaba</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Nacos</span>
+                            <span class="tech-tag">Sentinel</span>
+                            <span class="tech-tag">RocketMQ</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🔐</div>
+                        <h4 class="tech-name">Spring Security</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">认证授权</span>
+                            <span class="tech-tag">OAuth2</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🗺️</div>
+                        <h4 class="tech-name">MyBatis</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">ORM</span>
+                            <span class="tech-tag">动态SQL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-category" data-aos="fade-up">
+                <h3 class="tech-category-title">🗄️ 数据库与缓存</h3>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <div class="tech-icon">🐬</div>
+                        <h4 class="tech-name">MySQL</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">索引优化</span>
+                            <span class="tech-tag">事务</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🐘</div>
+                        <h4 class="tech-name">PostgreSQL</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">JSONB</span>
+                            <span class="tech-tag">扩展</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🗃️</div>
+                        <h4 class="tech-name">SQL Server</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">T-SQL</span>
+                            <span class="tech-tag">存储过程</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🍃</div>
+                        <h4 class="tech-name">MongoDB</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">文档存储</span>
+                            <span class="tech-tag">聚合</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">⚡</div>
+                        <h4 class="tech-name">Redis</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">缓存</span>
+                            <span class="tech-tag">分布式锁</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-category" data-aos="fade-up">
+                <h3 class="tech-category-title">📊 大数据与可视化</h3>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <div class="tech-icon">🏛️</div>
+                        <h4 class="tech-name">Doris</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">数仓</span>
+                            <span class="tech-tag">OLAP</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🌊</div>
+                        <h4 class="tech-name">Flink</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">实时计算</span>
+                            <span class="tech-tag">流处理</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">📈</div>
+                        <h4 class="tech-name">Superset</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">可视化</span>
+                            <span class="tech-tag">BI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-category" data-aos="fade-up">
+                <h3 class="tech-category-title">🔗 中间件与分布式</h3>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <div class="tech-icon">🚀</div>
+                        <h4 class="tech-name">RocketMQ</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">消息队列</span>
+                            <span class="tech-tag">削峰填谷</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🔒</div>
+                        <h4 class="tech-name">Redisson</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">分布式锁</span>
+                            <span class="tech-tag">限流</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🧩</div>
+                        <h4 class="tech-name">Seata</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">分布式事务</span>
+                            <span class="tech-tag">TCC</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">📅</div>
+                        <h4 class="tech-name">XXL-Job</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">任务调度</span>
+                            <span class="tech-tag">分布式</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🐬</div>
+                        <h4 class="tech-name">DolphinScheduler</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">工作流调度</span>
+                            <span class="tech-tag">DAG</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-category" data-aos="fade-up">
+                <h3 class="tech-category-title">📦 存储与服务器</h3>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <div class="tech-icon">🗂️</div>
+                        <h4 class="tech-name">MinIO</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">对象存储</span>
+                            <span class="tech-tag">文件服务</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🌐</div>
+                        <h4 class="tech-name">Nginx</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">反向代理</span>
+                            <span class="tech-tag">负载均衡</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-category" data-aos="fade-up">
+                <h3 class="tech-category-title">🖥️ 前端与工作流</h3>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <div class="tech-icon">🖌️</div>
+                        <h4 class="tech-name">Vue</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">Vue3</span>
+                            <span class="tech-tag">组件化</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">📊</div>
+                        <h4 class="tech-name">ECharts</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">图表</span>
+                            <span class="tech-tag">大屏</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🟢</div>
+                        <h4 class="tech-name">Node.js</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">脚本</span>
+                            <span class="tech-tag">工具链</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🔄</div>
+                        <h4 class="tech-name">Flowable</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">工作流引擎</span>
+                            <span class="tech-tag">BPMN</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">⚙️</div>
+                        <h4 class="tech-name">Activiti</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">工作流</span>
+                            <span class="tech-tag">审批</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-category" data-aos="fade-up">
+                <h3 class="tech-category-title">🛠️ CI/CD 与运维</h3>
+                <div class="tech-grid">
+                    <div class="tech-card">
+                        <div class="tech-icon">🦊</div>
+                        <h4 class="tech-name">GitLab</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">代码管理</span>
+                            <span class="tech-tag">CI/CD</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🔧</div>
+                        <h4 class="tech-name">Jenkins</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">自动化部署</span>
+                            <span class="tech-tag">Pipeline</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">🐳</div>
+                        <h4 class="tech-name">Docker-compose</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">容器编排</span>
+                            <span class="tech-tag">环境管理</span>
+                        </div>
+                    </div>
+                    <div class="tech-card">
+                        <div class="tech-icon">📡</div>
+                        <h4 class="tech-name">WGCLOUD</h4>
+                        <div class="tech-tags">
+                            <span class="tech-tag">监控告警</span>
+                            <span class="tech-tag">服务器监控</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
-        
+
+        <!-- 个人能力 -->
+        <section class="section" id="capabilities">
+            <h2 class="section-title" data-aos="fade-up">个人能力</h2>
+            <div class="capability-grid">
+                <div class="capability-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="capability-icon">💬</div>
+                    <h3>需求沟通与对接</h3>
+                    <p>深入业务一线，与各部门人员高效沟通，精准理解业务需求，整理需求文档，将业务语言转化为技术方案。</p>
+                    <ul class="capability-list">
+                        <li>需求调研与梳理</li>
+                        <li>跨部门协调对接</li>
+                        <li>第三方系统接口整合</li>
+                    </ul>
+                </div>
+                <div class="capability-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="capability-icon">📋</div>
+                    <h3>项目管理与规划</h3>
+                    <p>制定开发周期，安排任务优先级，跟进开发进度，确保项目按时交付，具备良好的项目推进能力。</p>
+                    <ul class="capability-list">
+                        <li>开发计划制定</li>
+                        <li>任务拆解与分配</li>
+                        <li>风险识别与应对</li>
+                    </ul>
+                </div>
+                <div class="capability-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="capability-icon">🚀</div>
+                    <h3>部署与上线</h3>
+                    <p>负责系统部署、环境搭建、持续集成与交付，保障应用平稳上线，熟悉容器化部署与自动化流程。</p>
+                    <ul class="capability-list">
+                        <li>Docker & Docker-compose</li>
+                        <li>GitLab CI/CD & Jenkins</li>
+                        <li>Linux 环境部署</li>
+                    </ul>
+                </div>
+                <div class="capability-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="capability-icon">🛡️</div>
+                    <h3>稳定性与运维</h3>
+                    <p>关注系统性能与稳定性，搭建监控体系，快速定位并解决线上问题，保障服务高可用。</p>
+                    <ul class="capability-list">
+                        <li>WGCLOUD 监控告警</li>
+                        <li>日志收集与分析</li>
+                        <li>性能调优</li>
+                    </ul>
+                </div>
+                <div class="capability-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="capability-icon">🤖</div>
+                    <h3>AI 辅助开发</h3>
+                    <p>利用 Trea、OpenCode 等 AI 工具辅助编码、生成 API 文档与测试用例，提升开发效率与交付质量。</p>
+                    <ul class="capability-list">
+                        <li>AI 代码生成</li>
+                        <li>自动化文档</li>
+                        <li>智能测试</li>
+                    </ul>
+                </div>
+                <div class="capability-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="capability-icon">🏗️</div>
+                    <h3>架构与设计</h3>
+                    <p>参与系统模型设计，熟悉常用设计模式，具备微服务架构设计经验，善于解决分布式场景下的技术挑战。</p>
+                    <ul class="capability-list">
+                        <li>微服务架构</li>
+                        <li>分布式事务/锁</li>
+                        <li>设计模式</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
         <footer>
             <div class="contact-buttons">
-                <a href="https://github.com/smallOrangei" class="btn btn-github" target="_blank">
+                <a href="https://smallorangei.github.io/smallOrangei/" class="btn btn-github" target="_blank">
                     GitHub 主页
-                </a>
-                <a href="mailto:orangeweni@outlook.com" class="btn btn-email">
-                    联系我
                 </a>
             </div>
             <p class="copyright">© <span id="current-year"></span> 小橙 | 代码如诗，架构如画</p>
@@ -517,20 +893,21 @@
     </div>
 
     <script>
-        // 初始化AOS动画库
+        // 初始化 AOS
         AOS.init({
             duration: 1000,
             once: true,
             offset: 100
         });
 
-        // 初始化Typed.js
+        // 初始化 Typed.js
         var typed = new Typed('#typed-text', {
             strings: [
                 "探索Java技术深度",
                 "构建高可用分布式系统",
                 "研究微服务与云原生",
-                "优化系统性能与稳定性"
+                "优化系统性能与稳定性",
+                "用代码创造价值"
             ],
             typeSpeed: 60,
             backSpeed: 30,
@@ -540,10 +917,10 @@
             cursorChar: '|'
         });
 
-        // 设置当前年份
+        // 当前年份
         document.getElementById('current-year').textContent = new Date().getFullYear();
 
-        // Three.js星空背景
+        // Three.js 星空背景
         let scene, camera, renderer, stars = [];
 
         function initThree() {
@@ -551,60 +928,51 @@
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             document.getElementById('starfield').appendChild(renderer.domElement);
 
             // 创建星星
+            const starsGeometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(3000 * 3);
             for (let i = 0; i < 3000; i++) {
-                const star = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.1, 24, 24),
-                    new THREE.MeshBasicMaterial({ color: 0xffffff })
-                );
-                
-                const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(2000));
-                star.position.set(x, y, z);
-                scene.add(star);
-                stars.push(star);
+                positions[i * 3] = (Math.random() - 0.5) * 2000;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 2000;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 2000;
             }
+            starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.8, transparent: true, opacity: 0.9 });
+            const starField = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(starField);
+            stars.push(starField);
 
-            camera.position.z = 1;
+            camera.position.z = 100;
 
-            animateStars();
+            animateStars(starField);
         }
 
-        function animateStars() {
-            requestAnimationFrame(animateStars);
-            
-            stars.forEach(star => {
-                star.position.z += 0.5;
-                if (star.position.z > 1000) {
-                    star.position.z = -1000;
-                }
-                
-                // 添加闪烁效果
-                star.material.opacity = 0.5 + 0.5 * Math.sin(Date.now() * 0.001 + star.position.x);
-            });
-            
+        function animateStars(starField) {
+            requestAnimationFrame(() => animateStars(starField));
+            starField.rotation.y += 0.0001;
+            starField.rotation.x += 0.00005;
             renderer.render(scene, camera);
         }
 
-        // 窗口大小变化时更新
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // 初始化Three.js
         initThree();
 
-        // 初始化Particles.js
+        // 初始化 Particles.js
         particlesJS('particles-js', {
             particles: {
-                number: { value: 60, density: { enable: true, value_area: 800 } },
+                number: { value: 70, density: { enable: true, value_area: 800 } },
                 color: { value: "#ff7b00" },
                 shape: { type: "circle" },
                 opacity: {
-                    value: 0.5,
+                    value: 0.6,
                     random: true,
                     anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
                 },
@@ -615,20 +983,20 @@
                 },
                 line_linked: {
                     enable: true,
-                    distance: 150,
+                    distance: 160,
                     color: "#ffaa00",
-                    opacity: 0.4,
+                    opacity: 0.3,
                     width: 1
                 },
                 move: {
                     enable: true,
-                    speed: 1,
+                    speed: 1.2,
                     direction: "none",
                     random: true,
                     straight: false,
                     out_mode: "out",
                     bounce: false,
-                    attract: { enable: false, rotateX: 600, rotateY: 1200 }
+                    attract: { enable: true, rotateX: 600, rotateY: 1200 }
                 }
             },
             interactivity: {
@@ -639,7 +1007,7 @@
                     resize: true
                 },
                 modes: {
-                    repulse: { distance: 100, duration: 0.4 },
+                    repulse: { distance: 120, duration: 0.4 },
                     push: { particles_nb: 4 }
                 }
             },
@@ -650,20 +1018,14 @@
         function createMeteor() {
             const meteor = document.createElement('div');
             meteor.className = 'meteor';
-            
-            // 随机位置和大小
             const left = Math.random() * 100;
             const top = Math.random() * 50;
             const size = Math.random() * 2 + 1;
-            
             meteor.style.left = `${left}vw`;
             meteor.style.top = `${top}vh`;
             meteor.style.width = `${size}px`;
             meteor.style.height = `${size}px`;
-            
             document.getElementById('meteors-container').appendChild(meteor);
-            
-            // 流星动画
             anime({
                 targets: meteor,
                 translateX: ['0vw', '100vw'],
@@ -673,28 +1035,35 @@
                 easing: 'linear',
                 complete: function() {
                     meteor.remove();
-                    // 创建新的流星
                     setTimeout(createMeteor, Math.random() * 5000);
                 }
             });
         }
-        
-        // 初始化一些流星
-        for (let i = 0; i < 5; i++) {
-            setTimeout(createMeteor, Math.random() * 5000);
+        for (let i = 0; i < 6; i++) {
+            setTimeout(createMeteor, Math.random() * 4000);
         }
 
-        // 添加卡片悬停动画
+        // 卡片鼠标跟随光晕
+        document.querySelectorAll('.tech-card').forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                this.style.setProperty('--mouse-x', `${x}%`);
+                this.style.setProperty('--mouse-y', `${y}%`);
+            });
+        });
+
+        // 卡片悬停动画（Anime.js）
         document.querySelectorAll('.tech-card').forEach(card => {
             card.addEventListener('mouseenter', function() {
                 anime({
                     targets: this,
-                    scale: 1.05,
+                    scale: 1.03,
                     duration: 300,
                     easing: 'easeOutCubic'
                 });
             });
-            
             card.addEventListener('mouseleave', function() {
                 anime({
                     targets: this,
@@ -705,35 +1074,29 @@
             });
         });
 
-        // 添加按钮点击动画
+        // 按钮点击波纹
         document.querySelectorAll('.btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
-                // 创建点击波纹效果
                 const ripple = document.createElement('span');
                 const rect = this.getBoundingClientRect();
                 const size = Math.max(rect.width, rect.height);
                 const x = e.clientX - rect.left - size / 2;
                 const y = e.clientY - rect.top - size / 2;
-                
                 ripple.style.width = ripple.style.height = size + 'px';
                 ripple.style.left = x + 'px';
                 ripple.style.top = y + 'px';
                 ripple.classList.add('ripple');
-                
                 this.appendChild(ripple);
-                
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
+                setTimeout(() => ripple.remove(), 600);
             });
         });
 
-        // 添加滚动视差效果
+        // 视差滚动
         window.addEventListener('scroll', function() {
             const scrolled = window.pageYOffset;
-            const parallax = document.querySelector('#starfield');
-            if (parallax) {
-                parallax.style.transform = `translateY(${scrolled * 0.5}px)`;
+            const starfield = document.querySelector('#starfield');
+            if (starfield) {
+                starfield.style.transform = `translateY(${scrolled * 0.3}px)`;
             }
         });
     </script>
