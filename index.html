@@ -1,1104 +1,1033 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小橙 | Java中级程序员</title>
-    <!-- 可爱橙子 favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍊</text></svg>">
-    <!-- Three.js 3D图形库 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Anime.js 动画库 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <!-- Typed.js 打字效果 -->
-    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-    <!-- AOS 滚动动画 -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <!-- Particles.js 粒子效果 -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <style>
-        :root {
-            --primary: #ff7b00;
-            --secondary: #ffaa00;
-            --accent: #ffcc00;
-            --bg-dark: #0a0a2a;
-            --card-bg: rgba(16, 18, 47, 0.75);
-            --text-light: #e0e0ff;
-            --text-muted: #a0a0ff;
-            --border-glow: rgba(255, 123, 0, 0.3);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<meta name="theme-color" content="#c62828">
+<title>濮乐购.会员权益中心</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue","Microsoft YaHei",sans-serif;background:#f4f5f7;color:#1a1a1a;-webkit-font-smoothing:antialiased}
+.hide{display:none!important}
+img{display:block;border:0}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
-        }
+.toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);background:rgba(0,0,0,.8);color:#fff;font-size:13px;padding:11px 18px;border-radius:8px;z-index:9999;opacity:0;transition:.25s;pointer-events:none;max-width:72%;text-align:center;line-height:1.5}
+.toast.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
 
-        body {
-            background: var(--bg-dark);
-            color: #fff;
-            overflow-x: hidden;
-            min-height: 100vh;
-            touch-action: manipulation;
-        }
+/* 抽奖层 */
+.lottery{position:fixed;inset:0;z-index:500;background:radial-gradient(circle at 50% 30%,#8e1a1a 0%,#5a0f0f 45%,#2b0707 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow:hidden}
+.lottery::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 20%,rgba(255,200,90,.14) 0,transparent 32%),radial-gradient(circle at 85% 75%,rgba(255,200,90,.10) 0,transparent 32%)}
+.lottery-title{font-size:23px;font-weight:800;color:#ffd97d;letter-spacing:2px;z-index:2;text-shadow:0 2px 12px rgba(255,180,60,.5)}
+.lottery-sub{font-size:12px;color:#f5c98a;letter-spacing:1px;margin-top:8px;z-index:2}
+.lottery-sub2{font-size:11px;color:rgba(245,201,138,.6);margin-top:5px;z-index:2}
+.wheel-wrap{position:relative;width:266px;height:266px;margin:30px 0 8px;z-index:2}
+.wheel-ring{position:absolute;inset:0;border-radius:50%;background:linear-gradient(145deg,#ffe1a3,#d4a24c 45%,#a97a22);box-shadow:0 0 0 8px rgba(255,217,125,.14),0 12px 40px rgba(0,0,0,.45);padding:7px}
+.wheel{width:100%;height:100%;border-radius:50%;position:relative;overflow:hidden;transition:transform 4.2s cubic-bezier(.16,.86,.28,1);
+  background:conic-gradient(
+    #9e9e9e 0deg 60deg,
+    #c62828 60deg 120deg,
+    #f57c00 120deg 180deg,
+    #9e9e9e 180deg 240deg,
+    #fdd835 240deg 300deg,
+    #fff59d 300deg 360deg
+  );
+}
+.wheel-label{position:absolute;left:50%;top:50%;width:70px;height:16px;margin-left:-35px;margin-top:-8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;letter-spacing:.5px;white-space:nowrap;pointer-events:none}
+.wheel-label.gray{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.wheel-label.red{color:#ffe9b8;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.wheel-label.orange{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.wheel-label.yellow{color:#5d4037;text-shadow:0 1px 0 rgba(255,255,255,.5)}
+.wheel-label.light{color:#5d4037;text-shadow:0 1px 0 rgba(255,255,255,.5)}
+.wheel-center{position:absolute;left:50%;top:50%;width:66px;height:66px;margin:-33px 0 0 -33px;border-radius:50%;background:linear-gradient(145deg,#ff6a4d,#c62828);color:#fff;font-size:15px;font-weight:800;letter-spacing:1px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.35),inset 0 2px 6px rgba(255,255,255,.35);z-index:3}
+.wheel-pointer{position:absolute;left:50%;top:-4px;margin-left:-13px;width:26px;height:30px;z-index:4}
+.wheel-pointer::before{content:'';display:block;width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:24px solid #ffd97d;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+.lottery-btn{margin-top:22px;z-index:2;padding:13px 54px;border:0;border-radius:30px;background:linear-gradient(135deg,#ffe9a8,#d4a24c);color:#7a1717;font-size:17px;font-weight:800;letter-spacing:3px;box-shadow:0 8px 24px rgba(212,162,76,.42);transition:transform .15s}
+.lottery-btn:active{transform:scale(.96)}
+.lottery-btn:disabled{opacity:.55}
+.lottery-foot{position:absolute;bottom:26px;font-size:10px;color:rgba(245,201,138,.42);z-index:2;text-align:center;line-height:1.7}
 
-        #starfield {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-        }
+/* 中奖层 */
+.prize{position:fixed;inset:0;z-index:520;background:radial-gradient(circle at 50% 35%,#8e1a1a,#4a0c0c 60%,#240505);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px}
+.prize-box{background:#fff;border-radius:20px;padding:34px 26px;width:100%;max-width:322px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.5);animation:pop .45s cubic-bezier(.2,1.3,.5,1)}
+@keyframes pop{from{transform:scale(.82);opacity:0}}
+.prize-badge{display:inline-block;background:linear-gradient(135deg,#ffe9a8,#d4a24c);color:#7a1717;font-size:11px;font-weight:800;letter-spacing:2px;padding:5px 15px;border-radius:20px}
+.prize-h1{font-size:25px;font-weight:800;color:#c62828;margin-top:16px;letter-spacing:1px}
+.prize-p{font-size:13px;color:#888;margin-top:12px;line-height:1.8}
+.prize-items{display:flex;gap:10px;margin-top:20px}
+.prize-item{flex:1;background:#fff9f0;border:1px solid #f3e2c8;border-radius:11px;padding:13px 6px}
+.prize-item .e{font-size:24px}
+.prize-item .t{font-size:11px;color:#a87b3a;margin-top:6px;font-weight:600}
+.prize-btn{margin-top:24px;width:100%;padding:14px;border:0;border-radius:12px;background:linear-gradient(135deg,#e8453c,#c62828);color:#fff;font-size:16px;font-weight:700;letter-spacing:1px;box-shadow:0 8px 22px rgba(198,40,40,.35)}
+.prize-btn:active{opacity:.85}
 
-        #particles-js {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
+/* 主应用 */
+.app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;background:#f4f5f7;position:relative}
+.topbar{flex-shrink:0;background:#fff;padding-top:env(safe-area-inset-top);border-bottom:1px solid #eee}
+.topbar-inner{height:46px;display:flex;align-items:center;justify-content:center}
+.topbar-title{font-size:16px;font-weight:600;color:#222;letter-spacing:.5px}
+.topbar-title small{color:#c62828;font-weight:800}
+.content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;position:relative}
+.page{display:none;padding-bottom:16px}
+.page.on{display:block}
 
-        /* 光晕背景装饰 */
-        .glow-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.15;
-            z-index: -3;
-            pointer-events: none;
-            animation: floatOrb 20s infinite alternate ease-in-out;
-        }
-        .glow-orb:nth-child(1) {
-            width: 500px;
-            height: 500px;
-            background: #ff7b00;
-            top: -150px;
-            left: -150px;
-        }
-        .glow-orb:nth-child(2) {
-            width: 600px;
-            height: 600px;
-            background: #4a00e0;
-            bottom: -200px;
-            right: -200px;
-            animation-delay: -10s;
-        }
-        .glow-orb:nth-child(3) {
-            width: 400px;
-            height: 400px;
-            background: #ffaa00;
-            top: 40%;
-            left: 60%;
-            animation-delay: -5s;
-        }
+.tabbar{flex-shrink:0;display:flex;background:#fff;border-top:1px solid #ececec;padding-bottom:env(safe-area-inset-bottom)}
+.tab{flex:1;padding:7px 0 6px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#9a9a9a;font-size:10px;position:relative}
+.tab .ti{font-size:21px;line-height:1}
+.tab.on{color:#c62828;font-weight:600}
+.tab.on::before{content:'';position:absolute;top:0;left:50%;margin-left:-11px;width:22px;height:2.5px;background:#c62828;border-radius:2px}
 
-        @keyframes floatOrb {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(50px, -30px) scale(1.1); }
-            100% { transform: translate(-30px, 40px) scale(0.95); }
-        }
+/* 首页 */
+.searchbar{padding:9px 14px;background:#fff}
+.searchbar .box{height:34px;background:#f2f3f5;border-radius:17px;display:flex;align-items:center;padding:0 13px;color:#aaa;font-size:13px;gap:7px}
+.banner{margin:0 0 12px;position:relative;height:158px;overflow:hidden;background:#333}
+.banner-track{display:flex;height:100%;transition:transform .45s ease}
+.banner-item{min-width:100%;height:100%;position:relative}
+.banner-item img{width:100%;height:100%;object-fit:cover}
+.banner-item .bd{position:absolute;inset:auto 0 0 0;padding:24px 16px 14px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.78))}
+.banner-item .bd .t{font-size:16px;font-weight:800;letter-spacing:.5px}
+.banner-item .bd .s{font-size:11px;opacity:.9;margin-top:3px}
+.banner-item .go{position:absolute;right:14px;top:14px;font-size:11px;background:rgba(0,0,0,.42);color:#fff;padding:4px 10px;border-radius:14px;backdrop-filter:blur(4px)}
+.banner-dots{position:absolute;bottom:7px;right:13px;display:flex;gap:5px;z-index:3}
+.banner-dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.45)}
+.banner-dots i.on{background:#fff;width:14px;border-radius:3px;transition:.3s}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 1;
-        }
+.quick{display:flex;background:#fff;margin:0 0 12px;padding:14px 0 12px}
+.quick .q{flex:1;text-align:center}
+.quick .q .e{font-size:23px}
+.quick .q .t{font-size:11px;color:#666;margin-top:6px}
 
-        header {
-            padding: 120px 0 80px;
-            text-align: center;
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+.hot-wrap{margin:0 0 12px;background:#fff;padding:13px 0 4px;border-radius:12px;margin-left:12px;margin-right:12px}
+.hot-hd{display:flex;align-items:center;justify-content:space-between;padding:0 14px 10px}
+.hot-hd .t{font-size:15px;font-weight:700;color:#222;display:flex;align-items:center;gap:6px}
+.hot-hd .t::before{content:'';width:3px;height:14px;background:#c62828;border-radius:2px}
+.hot-hd .m{font-size:11px;color:#bbb}
+.hot-scroll{display:flex;gap:10px;overflow-x:auto;padding:0 14px 12px}
+.hot-scroll::-webkit-scrollbar{display:none}
+.hot-card{flex-shrink:0;width:104px}
+.hot-card img{width:104px;height:104px;border-radius:9px;object-fit:cover;background:#eee}
+.hot-card .n{font-size:12px;color:#222;margin-top:7px;line-height:1.35;height:32px;overflow:hidden}
+.hot-card .p{font-size:13px;color:#c62828;font-weight:700;margin-top:3px}
+.hot-card .p small{font-size:10px;color:#bbb;text-decoration:line-through;font-weight:400;margin-left:4px}
 
-        .name {
-            font-size: 4rem;
-            font-weight: 800;
-            background: linear-gradient(45deg, #ff7b00, #ffaa00, #ffcc00, #ff7b00);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin-bottom: 20px;
-            text-shadow: 0 0 25px rgba(255, 123, 0, 0.4);
-            letter-spacing: 3px;
-            animation: gradientShift 6s ease infinite;
-        }
+.sec{margin:0 12px 12px;background:#fff;border-radius:12px;overflow:hidden}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 14px 11px}
+.sec-hd .t{font-size:15px;font-weight:700;color:#222;display:flex;align-items:center;gap:6px}
+.sec-hd .t::before{content:'';width:3px;height:14px;background:#c62828;border-radius:2px}
+.sec-hd .m{font-size:11px;color:#bbb}
 
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+.shop-row{display:flex;padding:12px 14px;border-top:1px solid #f5f5f5;gap:11px;align-items:center}
+.shop-row:active{background:#fafafa}
+.shop-row .thumb{width:62px;height:62px;border-radius:9px;object-fit:cover;flex-shrink:0;background:#eee}
+.shop-row .info{flex:1;min-width:0}
+.shop-row .info .nm{font-size:14px;font-weight:600;color:#222;display:flex;align-items:center;gap:5px}
+.shop-row .info .nm .lv{font-size:9px;background:#fdf0e6;color:#d4803a;padding:1px 5px;border-radius:3px;font-weight:600}
+.shop-row .info .ds{font-size:11px;color:#999;margin-top:5px;display:flex;gap:8px;flex-wrap:wrap}
+.shop-row .info .ds .star{color:#ff9500;font-weight:600}
+.shop-row .info .tagline{font-size:11px;color:#c62828;margin-top:5px;background:#fdf2f1;display:inline-block;padding:2px 6px;border-radius:3px}
+.shop-row .arrow{color:#ccc;font-size:17px}
 
-        .title {
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            font-weight: 400;
-        }
+.cate-bar{display:flex;gap:8px;padding:11px 13px;background:#fff;overflow-x:auto;border-bottom:1px solid #f0f0f0;position:sticky;top:0;z-index:5}
+.cate-bar::-webkit-scrollbar{display:none}
+.cate-bar .c{flex-shrink:0;font-size:12px;padding:6px 13px;border-radius:15px;background:#f4f5f7;color:#666}
+.cate-bar .c.on{background:#fdf2f1;color:#c62828;font-weight:600}
 
-        .typed-text {
-            font-size: 1.6rem;
-            min-height: 45px;
-            color: #70d6ff;
-            margin-bottom: 50px;
-            letter-spacing: 2px;
-            text-shadow: 0 0 12px rgba(112, 214, 255, 0.6);
-        }
+/* 卡包 */
+.card-empty{padding:70px 30px;text-align:center;color:#bbb}
+.card-empty .e{font-size:50px;opacity:.4}
+.card-empty .t{font-size:14px;margin-top:14px;color:#999}
+.card-empty .s{font-size:11px;margin-top:7px}
+.card-item{margin:12px;background:#fff;border-radius:13px;padding:15px 16px;display:flex;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,.05);gap:13px;position:relative;overflow:hidden}
+.card-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(#e8453c,#f56c3e)}
+.card-item .ic{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:23px;flex-shrink:0}
+.card-item .ic.a{background:#fdeceb}
+.card-item .ic.b{background:#eef4fd}
+.card-item .bd{flex:1;min-width:0}
+.card-item .bd .nm{font-size:15px;font-weight:600;color:#222}
+.card-item .bd .ds{font-size:11px;color:#999;margin-top:4px;line-height:1.5}
+.card-item .bd .tg{display:flex;gap:6px;margin-top:7px}
+.card-item .bd .tg span{font-size:10px;padding:2px 6px;border-radius:3px;background:#fdf2f1;color:#e8453c;border:1px solid #fadbd8}
+.card-item .bd .tg span.b{background:#eef4fd;color:#3d7de0;border-color:#d6e4fa}
+.card-item .go{font-size:12px;color:#c62828;font-weight:600;flex-shrink:0}
 
-        /* 滚动指示器 */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            animation: bounceDown 2s infinite;
-        }
-        .scroll-indicator .mouse {
-            width: 26px;
-            height: 42px;
-            border: 2px solid var(--text-muted);
-            border-radius: 13px;
-            position: relative;
-        }
-        .scroll-indicator .mouse::after {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 8px;
-            background: var(--secondary);
-            border-radius: 2px;
-            animation: scrollWheel 1.5s infinite;
-        }
-        @keyframes scrollWheel {
-            0% { opacity: 1; top: 8px; }
-            100% { opacity: 0; top: 24px; }
-        }
-        @keyframes bounceDown {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(10px); }
-        }
+/* 我的 */
+.mine-hd{background:linear-gradient(135deg,#c62828,#e8453c);padding:22px 18px 46px;color:#fff;position:relative}
+.mine-hd .setting{position:absolute;right:16px;top:18px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:17px}
+.mine-hd .user{display:flex;align-items:center;gap:13px;margin-top:8px}
+.mine-hd .user img{width:60px;height:60px;border-radius:50%;border:2.5px solid rgba(255,255,255,.55);object-fit:cover;background:#ddd}
+.mine-hd .user .nm{font-size:18px;font-weight:700}
+.mine-hd .user .uid{font-size:11px;opacity:.88;margin-top:5px;letter-spacing:.3px}
+.mine-hd .user .vip{display:inline-block;font-size:10px;background:linear-gradient(135deg,#ffe9a8,#d4a24c);color:#7a1717;padding:2px 8px;border-radius:10px;font-weight:700;margin-top:6px}
+.mine-card{background:#fff;margin:-32px 13px 0;border-radius:13px;padding:16px 0;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;position:relative;z-index:2}
+.mine-card .m{flex:1;text-align:center;border-right:1px solid #f2f2f2}
+.mine-card .m:last-child{border:0}
+.mine-card .m .n{font-size:17px;font-weight:700;color:#222}
+.mine-card .m .t{font-size:11px;color:#999;margin-top:4px}
+.menu{margin:13px;background:#fff;border-radius:13px;overflow:hidden}
+.menu .row{display:flex;align-items:center;padding:14px 15px;border-bottom:1px solid #f5f5f5;gap:12px}
+.menu .row:last-child{border:0}
+.menu .row:active{background:#fafafa}
+.menu .row .e{font-size:19px;width:24px;text-align:center}
+.menu .row .t{flex:1;font-size:14px;color:#333}
+.menu .row .r{font-size:11px;color:#bbb}
+.menu .row .arrow{color:#ddd;font-size:15px}
 
-        .section {
-            padding: 80px 0;
-            position: relative;
-        }
+/* 设置 */
+.settings{position:fixed;inset:0;z-index:400;background:#f4f5f7;transform:translateX(100%);transition:transform .28s ease;display:flex;flex-direction:column;max-width:480px;margin:0 auto}
+.settings.on{transform:translateX(0)}
+.settings .s-bar{flex-shrink:0;background:#fff;padding-top:env(safe-area-inset-top);border-bottom:1px solid #eee;height:calc(46px + env(safe-area-inset-top));display:flex;align-items:center;position:relative}
+.settings .s-bar .back{position:absolute;left:12px;font-size:22px;color:#333;width:34px;text-align:center}
+.settings .s-bar .tt{flex:1;text-align:center;font-size:16px;font-weight:600}
+.settings .s-body{flex:1;overflow-y:auto;padding:13px 0 30px}
+.settings .grp{margin:0 13px 13px;background:#fff;border-radius:12px;overflow:hidden}
+.settings .grp .row{display:flex;align-items:center;padding:14px 15px;border-bottom:1px solid #f5f5f5;gap:12px}
+.settings .grp .row:last-child{border:0}
+.settings .grp .row .t{flex:1;font-size:14px;color:#333}
+.settings .grp .row .r{font-size:12px;color:#bbb}
+.settings .grp .row .arrow{color:#ddd;font-size:15px}
+.settings .grp .row.danger .t{color:#c62828;font-weight:600}
+.switch{width:42px;height:24px;border-radius:12px;background:#e5e5e5;position:relative;transition:.2s;flex-shrink:0}
+.switch::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:.2s}
+.switch.on{background:#c62828}
+.switch.on::after{left:20px}
+.settings .reset-tip{margin:0 20px;font-size:11px;color:#bbb;line-height:1.8;text-align:center}
 
-        .section-title {
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 60px;
-            color: #fff;
-            position: relative;
-            letter-spacing: 2px;
-            font-weight: 700;
-        }
+/* 详情页 */
+.detail{display:none;position:absolute;inset:0;background:#f4f5f7;overflow-y:auto;-webkit-overflow-scrolling:touch;z-index:60}
+.detail.on{display:block}
+.d-hero{position:relative;height:210px;background:#333}
+.d-hero img{width:100%;height:100%;object-fit:cover}
+.d-hero .mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.45) 0,transparent 38%,rgba(0,0,0,.35) 100%)}
+.d-back{position:absolute;left:12px;top:14px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.42);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;backdrop-filter:blur(6px);z-index:3}
+.d-share{position:absolute;right:12px;top:14px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.42);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;backdrop-filter:blur(6px);z-index:3}
+.d-hero .cap{position:absolute;left:16px;bottom:14px;color:#fff;z-index:2}
+.d-hero .cap .t{font-size:17px;font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.d-hero .cap .s{font-size:11px;opacity:.92;margin-top:4px;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.d-body{padding:12px 12px 90px}
+.d-block{background:#fff;border-radius:13px;padding:15px;margin-bottom:11px}
+.d-name{font-size:19px;font-weight:800;color:#111;letter-spacing:.3px}
+.d-score{display:flex;align-items:center;gap:10px;margin-top:9px;font-size:12px;color:#888;flex-wrap:wrap}
+.d-score .st{color:#ff9500;font-weight:700;font-size:14px}
+.d-score .pill{background:#fdf2f1;color:#c62828;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600}
+.d-meta{margin-top:11px;padding-top:11px;border-top:1px solid #f4f4f4;font-size:12px;color:#777;line-height:2}
+.d-meta .row{display:flex;gap:8px}
+.d-meta .row .k{color:#aaa;flex-shrink:0;width:52px}
+.d-promo{background:linear-gradient(135deg,#fff6f5,#fff);border:1px solid #fadbd8;border-radius:13px;padding:13px 15px;margin-bottom:11px}
+.d-promo .p-hd{font-size:12px;font-weight:700;color:#c62828;display:flex;align-items:center;gap:6px;margin-bottom:9px}
+.d-promo .p-hd::before{content:'';width:3px;height:12px;background:#c62828;border-radius:2px}
+.d-promo .p-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#444;line-height:2}
+.d-promo .p-item .dot{width:5px;height:5px;border-radius:50%;background:#e8453c;flex-shrink:0}
+.d-promo .p-item .v{color:#c62828;font-weight:700}
+.d-title{font-size:15px;font-weight:700;color:#222;display:flex;align-items:center;gap:7px;margin:0 4px 10px}
+.d-title::before{content:'';width:3px;height:14px;background:#c62828;border-radius:2px}
+.d-title .more{margin-left:auto;font-size:11px;color:#bbb;font-weight:400}
+.goods{background:#fff;border-radius:13px;overflow:hidden;margin-bottom:11px}
+.goods .g{display:flex;gap:11px;padding:13px 14px;border-bottom:1px solid #f6f6f6;align-items:center}
+.goods .g:last-child{border:0}
+.goods .g img{width:72px;height:72px;border-radius:9px;object-fit:cover;background:#eee;flex-shrink:0}
+.goods .g .bd{flex:1;min-width:0}
+.goods .g .bd .n{font-size:14px;font-weight:600;color:#222;line-height:1.4}
+.goods .g .bd .d{font-size:11px;color:#aaa;margin-top:5px}
+.goods .g .bd .pr{margin-top:7px;display:flex;align-items:baseline;gap:6px}
+.goods .g .bd .pr .now{font-size:16px;font-weight:800;color:#c62828}
+.goods .g .bd .pr .now small{font-size:11px;font-weight:600}
+.goods .g .bd .pr .old{font-size:11px;color:#bbb;text-decoration:line-through}
+.goods .g .bd .pr .sold{font-size:10px;color:#bbb;margin-left:auto}
+.goods .g .buy{flex-shrink:0;font-size:12px;background:linear-gradient(135deg,#e8453c,#c62828);color:#fff;padding:7px 14px;border-radius:16px;font-weight:600}
+.rev-top{display:flex;align-items:center;gap:14px;padding:14px 15px;border-bottom:1px solid #f6f6f6}
+.rev-top .big{font-size:32px;font-weight:800;color:#c62828;line-height:1}
+.rev-top .stars{font-size:13px;color:#ff9500;letter-spacing:1px}
+.rev-top .cnt{font-size:11px;color:#aaa;margin-top:4px}
+.rev-tags{display:flex;flex-wrap:wrap;gap:7px;padding:12px 15px;border-bottom:1px solid #f6f6f6}
+.rev-tags span{font-size:11px;background:#f4f5f7;color:#666;padding:5px 11px;border-radius:14px}
+.rev-tags span.on{background:#fdf2f1;color:#c62828;font-weight:600}
+.rev{padding:15px;border-bottom:1px solid #f6f6f6}
+.rev:last-child{border:0}
+.rev-hd{display:flex;align-items:center;gap:10px}
+.rev-hd img{width:34px;height:34px;border-radius:50%;object-fit:cover;background:#eee;flex-shrink:0}
+.rev-hd .nm{font-size:13px;font-weight:600;color:#333;flex:1}
+.rev-hd .dt{font-size:10.5px;color:#bbb}
+.rev-stars{font-size:11px;color:#ff9500;margin-top:8px;letter-spacing:1px}
+.rev-c{font-size:13px;color:#333;line-height:1.75;margin-top:7px;word-break:break-word}
+.rev-imgs{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}
+.rev-imgs img{width:76px;height:76px;border-radius:7px;object-fit:cover;background:#eee}
+.rev-tag{display:inline-block;font-size:10px;color:#999;background:#f5f5f5;padding:2px 7px;border-radius:3px;margin-top:9px}
+.rev-reply{margin-top:10px;background:#fafafa;border-radius:8px;padding:10px 12px;font-size:12px;color:#666;line-height:1.7}
+.rev-reply b{color:#c62828;font-weight:600}
+.d-bar{position:fixed;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;background:#fff;border-top:1px solid #ececec;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;z-index:70}
+.d-bar .ico{width:54px;text-align:center;font-size:10px;color:#888;display:flex;flex-direction:column;align-items:center;gap:3px;justify-content:center}
+.d-bar .ico .e{font-size:19px}
+.d-bar .btn{flex:1;height:44px;border-radius:22px;border:0;font-size:15px;font-weight:700}
+.d-bar .btn.ghost{background:#fff3f2;color:#c62828;border:1px solid #fadbd8}
+.d-bar .btn.main{background:linear-gradient(135deg,#e8453c,#c62828);color:#fff;box-shadow:0 6px 16px rgba(198,40,40,.3)}
 
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 120px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), transparent);
-            margin: 18px auto 0;
-            border-radius: 2px;
-        }
-
-        /* 技术卡片网格 */
-        .tech-category {
-            margin-bottom: 50px;
-        }
-        .tech-category-title {
-            font-size: 1.6rem;
-            margin-bottom: 25px;
-            color: var(--secondary);
-            padding-left: 15px;
-            border-left: 4px solid var(--primary);
-            letter-spacing: 1px;
-        }
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 22px;
-        }
-
-        .tech-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 22px 18px;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border-glow);
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(12px);
-            cursor: default;
-        }
-
-        .tech-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            opacity: 0.8;
-        }
-
-        .tech-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,123,0,0.15), transparent 60%);
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-        .tech-card:hover::after {
-            opacity: 1;
-        }
-
-        .tech-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 18px 35px rgba(255, 123, 0, 0.25);
-            border-color: var(--primary);
-        }
-
-        .tech-icon {
-            font-size: 2.8rem;
-            margin-bottom: 18px;
-            color: var(--secondary);
-            display: inline-block;
-            transition: transform 0.3s;
-        }
-        .tech-card:hover .tech-icon {
-            transform: scale(1.2) rotate(5deg);
-        }
-
-        .tech-name {
-            font-size: 1.25rem;
-            margin-bottom: 12px;
-            color: #fff;
-            font-weight: 600;
-        }
-
-        .tech-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-        }
-        .tech-tag {
-            background: rgba(255, 170, 0, 0.15);
-            color: var(--secondary);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            border: 1px solid rgba(255, 170, 0, 0.3);
-        }
-
-        /* 个人能力卡片 */
-        .capability-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-        .capability-card {
-            background: var(--card-bg);
-            border-radius: 18px;
-            padding: 30px 25px;
-            border: 1px solid var(--border-glow);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
-            transition: all 0.3s;
-            backdrop-filter: blur(12px);
-            position: relative;
-            overflow: hidden;
-        }
-        .capability-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(255, 123, 0, 0.2);
-            border-color: var(--primary);
-        }
-        .capability-icon {
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-        .capability-card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 12px;
-            color: var(--secondary);
-        }
-        .capability-card p {
-            color: var(--text-muted);
-            line-height: 1.7;
-            font-size: 0.95rem;
-        }
-        .capability-list {
-            list-style: none;
-            margin-top: 15px;
-        }
-        .capability-list li {
-            padding: 6px 0;
-            color: var(--text-light);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .capability-list li::before {
-            content: '▹';
-            color: var(--secondary);
-            font-weight: bold;
-        }
-
-        /* 底部 */
-        footer {
-            background: rgba(10, 12, 30, 0.95);
-            padding: 50px 0 25px;
-            text-align: center;
-            border-top: 1px solid var(--border-glow);
-            position: relative;
-            z-index: 1;
-        }
-        .contact-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 14px 30px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-            letter-spacing: 1px;
-        }
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
-            transition: 0.6s;
-        }
-        .btn:hover::before {
-            left: 100%;
-        }
-        .btn-github {
-            background: linear-gradient(45deg, #ff7b00, #ffaa00);
-            color: white;
-        }
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 14px 28px rgba(255, 123, 0, 0.45);
-        }
-        .copyright {
-            color: var(--text-muted);
-            margin-top: 30px;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-
-        /* 流星样式 */
-        .meteor {
-            position: fixed;
-            top: 0;
-            width: 2px;
-            height: 2px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1), 0 0 12px 3px #fff;
-            z-index: -1;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* 波纹效果 */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            transform: scale(0);
-            animation: ripple-animation 0.6s linear;
-            pointer-events: none;
-        }
-        @keyframes ripple-animation {
-            to {
-                transform: scale(4);
-                opacity: 0;
-            }
-        }
-
-        /* 响应式 */
-        @media (max-width: 768px) {
-            .name { font-size: 2.8rem; }
-            .title { font-size: 1.4rem; }
-            .typed-text { font-size: 1.2rem; }
-            .section-title { font-size: 2rem; }
-            .tech-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
-            .capability-grid { grid-template-columns: 1fr; }
-            .btn { width: 80%; max-width: 260px; }
-            header { padding: 100px 0 60px; min-height: 90vh; }
-        }
-
-        @media (max-width: 480px) {
-            .name { font-size: 2.2rem; }
-            .title { font-size: 1.1rem; }
-            .typed-text { font-size: 1rem; }
-            .tech-grid { grid-template-columns: 1fr; }
-            .tech-card { padding: 18px 14px; }
-            .capability-card { padding: 22px 18px; }
-        }
-    </style>
+/* 核销弹层 */
+.mask2{position:fixed;inset:0;background:rgba(0,0,0,.62);display:none;align-items:center;justify-content:center;z-index:600;padding:24px}
+.mask2.on{display:flex;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.pop{background:#fff;border-radius:15px;width:100%;max-width:328px;overflow:hidden;animation:up .26s cubic-bezier(.3,1.2,.5,1)}
+@keyframes up{from{transform:translateY(26px) scale(.96);opacity:0}}
+.pop-hd{background:linear-gradient(135deg,#e8453c,#c62828);color:#fff;padding:16px 20px;position:relative}
+.pop-hd .n{font-size:15px;font-weight:600}
+.pop-hd .m{font-size:11px;opacity:.9;margin-top:4px}
+.pop-hd .x{position:absolute;right:13px;top:13px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:14px}
+.pop-bd{padding:20px;text-align:center}
+.qr-box{width:176px;height:176px;margin:0 auto;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #eee;border-radius:7px;padding:6px}
+.qr-box img,.qr-box canvas{width:100%!important;height:100%!important;display:block}
+.code{margin-top:15px;font-family:"SF Mono",Consolas,Menlo,monospace;font-size:20px;font-weight:700;letter-spacing:3px;color:#222}
+.clabel{font-size:11px;color:#aaa;margin-top:5px}
+.store{margin-top:15px;padding-top:13px;border-top:1px dashed #e5e5e5;font-size:12px;color:#666;line-height:1.9;text-align:left}
+.store b{color:#333;font-weight:600}
+.valid{margin-top:11px;font-size:11px;color:#e8453c;background:#fdf2f1;padding:7px;border-radius:6px}
+.pop-ft{padding:0 20px 18px;font-size:10px;color:#bbb;text-align:center;line-height:1.7}
+</style>
 </head>
 <body>
-    <!-- 背景光晕 -->
-    <div class="glow-orb"></div>
-    <div class="glow-orb"></div>
-    <div class="glow-orb"></div>
 
-    <!-- Three.js星空背景 -->
-    <div id="starfield"></div>
+<!-- ============ 抽奖层 ============ -->
+<div class="lottery" id="lotteryLayer">
+  <div class="lottery-title">濮乐购 · 中秋抽奖</div>
+  <div class="lottery-sub">2026 中秋联合消费回馈</div>
+  <div class="lottery-sub2">首次进入可参与一次，必得特等奖</div>
+  <div class="wheel-wrap">
+    <div class="wheel-ring">
+      <div class="wheel" id="wheel">
+        <div class="wheel-label gray"   style="transform:rotate(30deg)  translateY(-86px) rotate(-30deg)">谢谢惠顾</div>
+        <div class="wheel-label red"    style="transform:rotate(90deg)  translateY(-86px) rotate(-90deg)">特等奖</div>
+        <div class="wheel-label orange" style="transform:rotate(150deg) translateY(-86px) rotate(-150deg)">一等奖</div>
+        <div class="wheel-label gray"   style="transform:rotate(210deg) translateY(-86px) rotate(-210deg)">谢谢惠顾</div>
+        <div class="wheel-label yellow" style="transform:rotate(270deg) translateY(-86px) rotate(-270deg)">二等奖</div>
+        <div class="wheel-label light"  style="transform:rotate(330deg) translateY(-86px) rotate(-330deg)">三等奖</div>
+      </div>
+    </div>
+    <div class="wheel-center">抽奖</div>
+    <div class="wheel-pointer"></div>
+  </div>
+  <button class="lottery-btn" id="lotteryBtn">点击抽奖</button>
+  <div class="lottery-foot">濮乐购 · 会员权益中心<br>客服 0393-618 0000</div>
+</div>
 
-    <!-- 粒子背景 -->
-    <div id="particles-js"></div>
+<!-- ============ 中奖层 ============ -->
+<div class="prize hide" id="prizeLayer">
+  <div class="prize-box">
+    <div class="prize-badge">特等奖</div>
+    <div class="prize-h1">恭喜获得特等奖</div>
+    <div class="prize-p">联合商户权益已发放至本账户<br>请在卡包中查看核销码</div>
+    <div class="prize-items">
+      <div class="prize-item"><div class="e">🌹</div><div class="t">玫瑰花束</div></div>
+      <div class="prize-item"><div class="e">🎁</div><div class="t">神秘礼盒</div></div>
+    </div>
+    <button class="prize-btn" id="prizeBtn">查看我的权益</button>
+  </div>
+</div>
 
-    <!-- 流星容器 -->
-    <div id="meteors-container"></div>
+<!-- ============ 主应用 ============ -->
+<div class="app hide" id="app">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-title">濮乐购<small>.</small>会员权益中心</div>
+    </div>
+  </div>
 
-    <div class="container">
-        <header>
-            <h1 class="name" data-aos="fade-down">小橙</h1>
-            <h2 class="title" data-aos="fade-up" data-aos-delay="200">Java中级程序员 & 后端开发工程师</h2>
-            <div class="typed-text" id="typed-text" data-aos="fade-up" data-aos-delay="400"></div>
-            <div class="scroll-indicator">
-                <div class="mouse"></div>
-                <span>向下探索</span>
-            </div>
-        </header>
+  <div class="content" id="content">
 
-        <!-- 技术栈详细 -->
-        <section class="section" id="tech-stack">
-            <h2 class="section-title" data-aos="fade-up">技术栈全景</h2>
+    <div class="page on" id="page-home">
+      <div class="searchbar"><div class="box">🔍 搜索商家、商品、活动</div></div>
 
-            <div class="tech-category" data-aos="fade-up">
-                <h3 class="tech-category-title">☕ 语言</h3>
-                <div class="tech-grid">
-                    <div class="tech-card">
-                        <div class="tech-icon">☕</div>
-                        <h4 class="tech-name">Java</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">集合</span>
-                            <span class="tech-tag">JUC</span>
-                            <span class="tech-tag">JVM</span>
-                            <span class="tech-tag">设计模式</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🐍</div>
-                        <h4 class="tech-name">Python</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">脚本开发</span>
-                            <span class="tech-tag">数据处理</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">📜</div>
-                        <h4 class="tech-name">JavaScript</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">ES6+</span>
-                            <span class="tech-tag">前端交互</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="banner">
+        <div class="banner-track" id="bannerTrack"></div>
+        <div class="banner-dots" id="bannerDots"></div>
+      </div>
 
-            <div class="tech-category" data-aos="fade-up">
-                <h3 class="tech-category-title">🌱 后端框架</h3>
-                <div class="tech-grid">
-                    <div class="tech-card">
-                        <div class="tech-icon">🍃</div>
-                        <h4 class="tech-name">Spring Boot</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">微服务</span>
-                            <span class="tech-tag">自动配置</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">☁️</div>
-                        <h4 class="tech-name">Spring Cloud Alibaba</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">Nacos</span>
-                            <span class="tech-tag">Sentinel</span>
-                            <span class="tech-tag">RocketMQ</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🔐</div>
-                        <h4 class="tech-name">Spring Security</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">认证授权</span>
-                            <span class="tech-tag">OAuth2</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🗺️</div>
-                        <h4 class="tech-name">MyBatis</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">ORM</span>
-                            <span class="tech-tag">动态SQL</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="quick">
+        <div class="q"><div class="e">🛒</div><div class="t">超市便利</div></div>
+        <div class="q"><div class="e">🍜</div><div class="t">美食外卖</div></div>
+        <div class="q"><div class="e">🎁</div><div class="t">中秋礼盒</div></div>
+        <div class="q"><div class="e">🎫</div><div class="t">卡包权益</div></div>
+      </div>
 
-            <div class="tech-category" data-aos="fade-up">
-                <h3 class="tech-category-title">🗄️ 数据库与缓存</h3>
-                <div class="tech-grid">
-                    <div class="tech-card">
-                        <div class="tech-icon">🐬</div>
-                        <h4 class="tech-name">MySQL</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">索引优化</span>
-                            <span class="tech-tag">事务</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🐘</div>
-                        <h4 class="tech-name">PostgreSQL</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">JSONB</span>
-                            <span class="tech-tag">扩展</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🗃️</div>
-                        <h4 class="tech-name">SQL Server</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">T-SQL</span>
-                            <span class="tech-tag">存储过程</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🍃</div>
-                        <h4 class="tech-name">MongoDB</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">文档存储</span>
-                            <span class="tech-tag">聚合</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">⚡</div>
-                        <h4 class="tech-name">Redis</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">缓存</span>
-                            <span class="tech-tag">分布式锁</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="hot-wrap">
+        <div class="hot-hd"><div class="t">中秋爆款</div><div class="m">滑动查看更多 ›</div></div>
+        <div class="hot-scroll" id="hotScroll"></div>
+      </div>
 
-            <div class="tech-category" data-aos="fade-up">
-                <h3 class="tech-category-title">📊 大数据与可视化</h3>
-                <div class="tech-grid">
-                    <div class="tech-card">
-                        <div class="tech-icon">🏛️</div>
-                        <h4 class="tech-name">Doris</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">数仓</span>
-                            <span class="tech-tag">OLAP</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🌊</div>
-                        <h4 class="tech-name">Flink</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">实时计算</span>
-                            <span class="tech-tag">流处理</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">📈</div>
-                        <h4 class="tech-name">Superset</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">可视化</span>
-                            <span class="tech-tag">BI</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tech-category" data-aos="fade-up">
-                <h3 class="tech-category-title">🔗 中间件与分布式</h3>
-                <div class="tech-grid">
-                    <div class="tech-card">
-                        <div class="tech-icon">🚀</div>
-                        <h4 class="tech-name">RocketMQ</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">消息队列</span>
-                            <span class="tech-tag">削峰填谷</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🔒</div>
-                        <h4 class="tech-name">Redisson</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">分布式锁</span>
-                            <span class="tech-tag">限流</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🧩</div>
-                        <h4 class="tech-name">Seata</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">分布式事务</span>
-                            <span class="tech-tag">TCC</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">📅</div>
-                        <h4 class="tech-name">XXL-Job</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">任务调度</span>
-                            <span class="tech-tag">分布式</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🐬</div>
-                        <h4 class="tech-name">DolphinScheduler</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">工作流调度</span>
-                            <span class="tech-tag">DAG</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tech-category" data-aos="fade-up">
-                <h3 class="tech-category-title">📦 存储与服务器</h3>
-                <div class="tech-grid">
-                    <div class="tech-card">
-                        <div class="tech-icon">🗂️</div>
-                        <h4 class="tech-name">MinIO</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">对象存储</span>
-                            <span class="tech-tag">文件服务</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🌐</div>
-                        <h4 class="tech-name">Nginx</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">反向代理</span>
-                            <span class="tech-tag">负载均衡</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tech-category" data-aos="fade-up">
-                <h3 class="tech-category-title">🖥️ 前端与工作流</h3>
-                <div class="tech-grid">
-                    <div class="tech-card">
-                        <div class="tech-icon">🖌️</div>
-                        <h4 class="tech-name">Vue</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">Vue3</span>
-                            <span class="tech-tag">组件化</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">📊</div>
-                        <h4 class="tech-name">ECharts</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">图表</span>
-                            <span class="tech-tag">大屏</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🟢</div>
-                        <h4 class="tech-name">Node.js</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">脚本</span>
-                            <span class="tech-tag">工具链</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🔄</div>
-                        <h4 class="tech-name">Flowable</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">工作流引擎</span>
-                            <span class="tech-tag">BPMN</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">⚙️</div>
-                        <h4 class="tech-name">Activiti</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">工作流</span>
-                            <span class="tech-tag">审批</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tech-category" data-aos="fade-up">
-                <h3 class="tech-category-title">🛠️ CI/CD 与运维</h3>
-                <div class="tech-grid">
-                    <div class="tech-card">
-                        <div class="tech-icon">🦊</div>
-                        <h4 class="tech-name">GitLab</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">代码管理</span>
-                            <span class="tech-tag">CI/CD</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🔧</div>
-                        <h4 class="tech-name">Jenkins</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">自动化部署</span>
-                            <span class="tech-tag">Pipeline</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">🐳</div>
-                        <h4 class="tech-name">Docker-compose</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">容器编排</span>
-                            <span class="tech-tag">环境管理</span>
-                        </div>
-                    </div>
-                    <div class="tech-card">
-                        <div class="tech-icon">📡</div>
-                        <h4 class="tech-name">WGCLOUD</h4>
-                        <div class="tech-tags">
-                            <span class="tech-tag">监控告警</span>
-                            <span class="tech-tag">服务器监控</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 个人能力 -->
-        <section class="section" id="capabilities">
-            <h2 class="section-title" data-aos="fade-up">个人能力</h2>
-            <div class="capability-grid">
-                <div class="capability-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="capability-icon">💬</div>
-                    <h3>需求沟通与对接</h3>
-                    <p>深入业务一线，与各部门人员高效沟通，精准理解业务需求，整理需求文档，将业务语言转化为技术方案。</p>
-                    <ul class="capability-list">
-                        <li>需求调研与梳理</li>
-                        <li>跨部门协调对接</li>
-                        <li>第三方系统接口整合</li>
-                    </ul>
-                </div>
-                <div class="capability-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="capability-icon">📋</div>
-                    <h3>项目管理与规划</h3>
-                    <p>制定开发周期，安排任务优先级，跟进开发进度，确保项目按时交付，具备良好的项目推进能力。</p>
-                    <ul class="capability-list">
-                        <li>开发计划制定</li>
-                        <li>任务拆解与分配</li>
-                        <li>风险识别与应对</li>
-                    </ul>
-                </div>
-                <div class="capability-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="capability-icon">🚀</div>
-                    <h3>部署与上线</h3>
-                    <p>负责系统部署、环境搭建、持续集成与交付，保障应用平稳上线，熟悉容器化部署与自动化流程。</p>
-                    <ul class="capability-list">
-                        <li>Docker & Docker-compose</li>
-                        <li>GitLab CI/CD & Jenkins</li>
-                        <li>Linux 环境部署</li>
-                    </ul>
-                </div>
-                <div class="capability-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="capability-icon">🛡️</div>
-                    <h3>稳定性与运维</h3>
-                    <p>关注系统性能与稳定性，搭建监控体系，快速定位并解决线上问题，保障服务高可用。</p>
-                    <ul class="capability-list">
-                        <li>WGCLOUD 监控告警</li>
-                        <li>日志收集与分析</li>
-                        <li>性能调优</li>
-                    </ul>
-                </div>
-                <div class="capability-card" data-aos="fade-up" data-aos-delay="500">
-                    <div class="capability-icon">🤖</div>
-                    <h3>AI 辅助开发</h3>
-                    <p>利用 Trea、OpenCode 等 AI 工具辅助编码、生成 API 文档与测试用例，提升开发效率与交付质量。</p>
-                    <ul class="capability-list">
-                        <li>AI 代码生成</li>
-                        <li>自动化文档</li>
-                        <li>智能测试</li>
-                    </ul>
-                </div>
-                <div class="capability-card" data-aos="fade-up" data-aos-delay="600">
-                    <div class="capability-icon">🏗️</div>
-                    <h3>架构与设计</h3>
-                    <p>参与系统模型设计，熟悉常用设计模式，具备微服务架构设计经验，善于解决分布式场景下的技术挑战。</p>
-                    <ul class="capability-list">
-                        <li>微服务架构</li>
-                        <li>分布式事务/锁</li>
-                        <li>设计模式</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <footer>
-            <div class="contact-buttons">
-                <a href="https://smallorangei.github.io/smallOrangei/" class="btn btn-github" target="_blank">
-                    GitHub 主页
-                </a>
-            </div>
-            <p class="copyright">© <span id="current-year"></span> 小橙 | 代码如诗，架构如画</p>
-        </footer>
+      <div class="sec">
+        <div class="sec-hd"><div class="t">濮阳热门商家</div><div class="m">更多 ›</div></div>
+        <div id="homeShops"></div>
+      </div>
     </div>
 
-    <script>
-        // 初始化 AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 100
-        });
+    <div class="page" id="page-shop">
+      <div class="cate-bar" id="cateBar">
+        <div class="c on">全部</div><div class="c">超市</div><div class="c">餐饮</div>
+        <div class="c">生鲜</div><div class="c">百货</div><div class="c">文玩</div><div class="c">花店</div>
+      </div>
+      <div id="shopList"></div>
+    </div>
 
-        // 初始化 Typed.js
-        var typed = new Typed('#typed-text', {
-            strings: [
-                "探索Java技术深度",
-                "构建高可用分布式系统",
-                "研究微服务与云原生",
-                "优化系统性能与稳定性",
-                "用代码创造价值"
-            ],
-            typeSpeed: 60,
-            backSpeed: 30,
-            backDelay: 2000,
-            loop: true,
-            showCursor: true,
-            cursorChar: '|'
-        });
+    <div class="page" id="page-card"><div id="cardBox"></div></div>
 
-        // 当前年份
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+    <div class="page" id="page-mine">
+      <div class="mine-hd">
+        <div class="setting" id="btnSetting">⚙️</div>
+        <div class="user">
+          <img src="https://a-ssl.dtstatic.com/uploads/blog/202607/20/OoSzbLJoi6E5NZ0.jpeg" alt="" onerror="this.style.background='#c62828';this.src=''">
+          <div>
+            <div class="nm">小橙</div>
+            <div class="uid">会员号 155 1546 6526</div>
+            <div class="vip">特等奖用户</div>
+          </div>
+        </div>
+      </div>
+      <div class="mine-card">
+        <div class="m"><div class="n" id="mCard">0</div><div class="t">卡包权益</div></div>
+        <div class="m"><div class="n">0</div><div class="t">优惠券</div></div>
+        <div class="m"><div class="n">0</div><div class="t">积分</div></div>
+      </div>
+      <div class="menu">
+        <div class="row fn"><div class="e">📦</div><div class="t">我的订单</div><div class="r">查看全部</div><div class="arrow">›</div></div>
+        <div class="row fn"><div class="e">🎫</div><div class="t">优惠券</div><div class="r">0 张</div><div class="arrow">›</div></div>
+        <div class="row fn"><div class="e">📍</div><div class="t">收货地址</div><div class="arrow">›</div></div>
+        <div class="row fn"><div class="e">⭐</div><div class="t">我的收藏</div><div class="arrow">›</div></div>
+      </div>
+      <div class="menu">
+        <div class="row fn"><div class="e">💎</div><div class="t">积分商城</div><div class="arrow">›</div></div>
+        <div class="row fn"><div class="e">🎧</div><div class="t">客服中心</div><div class="r">0393-618 0000</div><div class="arrow">›</div></div>
+        <div class="row fn"><div class="e">❓</div><div class="t">帮助与反馈</div><div class="arrow">›</div></div>
+        <div class="row fn"><div class="e">ℹ️</div><div class="t">关于濮乐购</div><div class="r">v2.6.0</div><div class="arrow">›</div></div>
+      </div>
+    </div>
 
-        // Three.js 星空背景
-        let scene, camera, renderer, stars = [];
+  </div>
 
-        function initThree() {
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            document.getElementById('starfield').appendChild(renderer.domElement);
+  <div class="detail" id="detailPage"></div>
 
-            // 创建星星
-            const starsGeometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(3000 * 3);
-            for (let i = 0; i < 3000; i++) {
-                positions[i * 3] = (Math.random() - 0.5) * 2000;
-                positions[i * 3 + 1] = (Math.random() - 0.5) * 2000;
-                positions[i * 3 + 2] = (Math.random() - 0.5) * 2000;
-            }
-            starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.8, transparent: true, opacity: 0.9 });
-            const starField = new THREE.Points(starsGeometry, starsMaterial);
-            scene.add(starField);
-            stars.push(starField);
+  <div class="tabbar" id="tabbar">
+    <div class="tab on" data-page="page-home"><div class="ti">🏠</div>首页</div>
+    <div class="tab" data-page="page-shop"><div class="ti">🏬</div>商家</div>
+    <div class="tab" data-page="page-card"><div class="ti">🎁</div>卡包</div>
+    <div class="tab" data-page="page-mine"><div class="ti">👤</div>我的</div>
+  </div>
+</div>
 
-            camera.position.z = 100;
+<!-- ============ 系统设置 ============ -->
+<div class="settings" id="settingsPage">
+  <div class="s-bar">
+    <div class="back" id="btnBack">‹</div>
+    <div class="tt">系统设置</div>
+  </div>
+  <div class="s-body">
+    <div class="grp">
+      <div class="row fn"><div class="t">账号与安全</div><div class="r">已保护</div><div class="arrow">›</div></div>
+      <div class="row fn"><div class="t">消息通知</div><div class="switch on"></div></div>
+      <div class="row fn"><div class="t">隐私设置</div><div class="arrow">›</div></div>
+      <div class="row fn"><div class="t">清除缓存</div><div class="r">12.6 MB</div><div class="arrow">›</div></div>
+    </div>
+    <div class="grp">
+      <div class="row fn"><div class="t">检查更新</div><div class="r">已是最新 v2.6.0</div><div class="arrow">›</div></div>
+      <div class="row fn"><div class="t">意见反馈</div><div class="arrow">›</div></div>
+      <div class="row fn"><div class="t">关于我们</div><div class="arrow">›</div></div>
+    </div>
+    <div class="grp">
+      <div class="row" id="btnReset"><div class="t danger">重置</div><div class="arrow">›</div></div>
+    </div>
+    <div class="reset-tip">濮乐购 · 会员权益中心 · 0393-618 0000</div>
+  </div>
+</div>
 
-            animateStars(starField);
-        }
+<!-- ============ 核销弹层 ============ -->
+<div class="mask2" id="mask">
+  <div class="pop">
+    <div class="pop-hd">
+      <div class="n" id="pn">权益核销</div>
+      <div class="m" id="pm"></div>
+      <div class="x" id="px">✕</div>
+    </div>
+    <div class="pop-bd">
+      <div id="qr" class="qr-box"></div>
+      <div class="code" id="pc"></div>
+      <div class="clabel">核销码 · 请向店员出示</div>
+      <div class="store" id="ps"></div>
+      <div class="valid" id="pv"></div>
+    </div>
+    <div class="pop-ft">二维码可微信扫描，会打开核销确认页<br>截图无效，请出示本页面</div>
+  </div>
+</div>
 
-        function animateStars(starField) {
-            requestAnimationFrame(() => animateStars(starField));
-            starField.rotation.y += 0.0001;
-            starField.rotation.x += 0.00005;
-            renderer.render(scene, camera);
-        }
+<div class="toast" id="toast"></div>
 
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+<script src="https://cdn.bootcdn.net/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function(){
+'use strict';
 
-        initThree();
+var KEY='plg_lottery_done';
+var U='https://images.unsplash.com/';
+var AVA='https://a-ssl.dtstatic.com/uploads/blog/202607/20/OoSzbLJoi6E5NZ0.jpeg';
 
-        // 初始化 Particles.js
-        particlesJS('particles-js', {
-            particles: {
-                number: { value: 70, density: { enable: true, value_area: 800 } },
-                color: { value: "#ff7b00" },
-                shape: { type: "circle" },
-                opacity: {
-                    value: 0.6,
-                    random: true,
-                    anim: { enable: true, speed: 1, opacity_min: 0.1, sync: false }
-                },
-                size: {
-                    value: 3,
-                    random: true,
-                    anim: { enable: true, speed: 2, size_min: 0.1, sync: false }
-                },
-                line_linked: {
-                    enable: true,
-                    distance: 160,
-                    color: "#ffaa00",
-                    opacity: 0.3,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 1.2,
-                    direction: "none",
-                    random: true,
-                    straight: false,
-                    out_mode: "out",
-                    bounce: false,
-                    attract: { enable: true, rotateX: 600, rotateY: 1200 }
-                }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: { enable: true, mode: "repulse" },
-                    onclick: { enable: true, mode: "push" },
-                    resize: true
-                },
-                modes: {
-                    repulse: { distance: 120, duration: 0.4 },
-                    push: { particles_nb: 4 }
-                }
-            },
-            retina_detect: true
-        });
+/* 根据昵称生成头像 */
+function nameAvatar(name){
+  var colors=[
+    ['#e57373','#c62828'],['#64b5f6','#1565c0'],['#81c784','#2e7d32'],
+    ['#ffb74d','#e65100'],['#ba68c8','#6a1b9a'],['#4db6ac','#00695c'],
+    ['#f06292','#ad1457'],['#9575cd','#4527a0'],['#4fc3f7','#0277bd'],
+    ['#aed581','#558b2f']
+  ];
+  var n=String(name||'友');
+  var hash=0;
+  for(var i=0;i<n.length;i++) hash=(hash*31+n.charCodeAt(i))&0x7fffffff;
+  var c=colors[hash%colors.length];
+  var txt=n.length<=2?n:n.slice(0,2);
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'+
+    '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'+
+    '<stop offset="0" stop-color="'+c[0]+'"/><stop offset="1" stop-color="'+c[1]+'"/>'+
+    '</linearGradient></defs>'+
+    '<rect width="100" height="100" fill="url(#g)"/>'+
+    '<text x="50" y="68" font-size="40" font-family="PingFang SC,Microsoft YaHei,sans-serif" font-weight="600" fill="#fff" text-anchor="middle">'+txt+'</text>'+
+    '</svg>';
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+}
 
-        // 流星效果
-        function createMeteor() {
-            const meteor = document.createElement('div');
-            meteor.className = 'meteor';
-            const left = Math.random() * 100;
-            const top = Math.random() * 50;
-            const size = Math.random() * 2 + 1;
-            meteor.style.left = `${left}vw`;
-            meteor.style.top = `${top}vh`;
-            meteor.style.width = `${size}px`;
-            meteor.style.height = `${size}px`;
-            document.getElementById('meteors-container').appendChild(meteor);
-            anime({
-                targets: meteor,
-                translateX: ['0vw', '100vw'],
-                translateY: ['0vh', '100vh'],
-                opacity: [0, 1, 0],
-                duration: Math.random() * 3000 + 2000,
-                easing: 'linear',
-                complete: function() {
-                    meteor.remove();
-                    setTimeout(createMeteor, Math.random() * 5000);
-                }
-            });
-        }
-        for (let i = 0; i < 6; i++) {
-            setTimeout(createMeteor, Math.random() * 4000);
-        }
+/* ================= 商家数据 ================= */
+var SHOPS=[
+{
+  n:'绿城超市', t:'超市便利', s:4.8, month:'月售 3200+',
+  hero:U+'photo-1607920591413-4ec007e70023?w=800&q=80',
+  addr:'濮阳市华龙区黄河路 128 号', time:'08:00 - 22:00', tel:'0393-886 6120',
+  dist:'1.2km', tagline:'中秋买一送一',
+  promos:['月饼礼盒全场买一送一','生鲜区满 199 减 30','会员日双倍积分'],
+  tags:['停车方便','收银快','生鲜新鲜'],
+  goods:[
+    {n:'稻香村中秋礼盒',d:'8 饼 4 味 · 经典款',p:128,o:168,sold:'已售 2136',img:U+'photo-1567620905732-2d1ec7ab7445?w=300&q=80'},
+    {n:'阳澄湖大闸蟹 8 只装',d:'公 4 母 4 · 鲜活直发',p:298,o:398,sold:'已售 862',img:U+'photo-1559737558-2f5a35f4523b?w=300&q=80'},
+    {n:'五常大米 10kg',d:'当季新米 · 真空装',p:89,o:129,sold:'已售 5412',img:U+'photo-1586201375761-83865001e31c?w=300&q=80'},
+    {n:'阳光玫瑰葡萄 2 斤',d:'云南直采 · 甜度 18+',p:39.9,o:59,sold:'已售 3271',img:U+'photo-1537640538966-79f369143f8f?w=300&q=80'}
+  ],
+  reviews:[
+    {u:'濮阳老王',s:5,d:'2026-09-18',c:'中秋活动是真的划算，月饼买一送一，一口气囤了六盒，家里老人孩子都爱吃。收银小哥还提醒我满 199 可以再减 30，服务挺到位。',imgs:[U+'photo-1567620905732-2d1ec7ab7445?w=200&q=80',U+'photo-1586201375761-83865001e31c?w=200&q=80'],tag:'月饼礼盒',reply:'感谢您的支持，祝您中秋快乐，阖家团圆！'},
+    {u:'小橘子',s:4,d:'2026-09-17',c:'人是真多，晚上七点去排队排了十几分钟。不过东西确实便宜，阳光玫瑰比外面水果店便宜一大截。',imgs:[],tag:'生鲜区',reply:''},
+    {u:'橙子不吃橙',s:5,d:'2026-09-16',c:'买的礼盒日期很新，不是临期货，特意看了下保质期还有两个多月。送人放心。',imgs:[U+'photo-1567620905732-2d1ec7ab7445?w=200&q=80'],tag:'日期新鲜',reply:'谢谢认可，我们所有礼盒都是当批次新品～'},
+    {u:'油田小李',s:4,d:'2026-09-14',c:'停车方便，地下车库直接上二楼，推车能推到车边上。就是周末人实在太多。',imgs:[],tag:'停车方便',reply:''}
+  ]
+},
+{
+  n:'百姓量贩', t:'超市便利', s:4.7, month:'月售 2800+',
+  hero:U+'photo-1542838132-92c53300491e?w=800&q=80',
+  addr:'濮阳市华龙区中原路 66 号', time:'08:30 - 21:30', tel:'0393-886 2233',
+  dist:'2.0km', tagline:'满 500 减 200',
+  promos:['全场满 500 减 200','家电专区满 1000 减 400','中秋礼盒第二件半价'],
+  tags:['价格便宜','货品齐全','停车方便'],
+  goods:[
+    {n:'美的电饭煲 4L',d:'智能预约 · 一键柴火饭',p:299,o:499,sold:'已售 1268',img:U+'photo-1585515320310-259814833e62?w=300&q=80'},
+    {n:'金龙鱼调和油 5L',d:'家庭装 · 非转基因',p:69.9,o:99,sold:'已售 8802',img:U+'photo-1474979266404-7eaacbcd87c5?w=300&q=80'},
+    {n:'清风抽纸 24 包',d:'原木浆 · 3 层加厚',p:39.9,o:59,sold:'已售 6210',img:U+'photo-1584556812952-905ffd0c611a?w=300&q=80'}
+  ],
+  reviews:[
+    {u:'油田老张',s:5,d:'2026-09-19',c:'满 500 减 200 是真的狠，买了台电饭煲加一堆日用品刚好凑够，实付三百出头，划算到不敢信。',imgs:[U+'photo-1585515320310-259814833e62?w=200&q=80'],tag:'满减给力',reply:'感谢您的光临，活动持续到中秋当天哦～'},
+    {u:'小满',s:4,d:'2026-09-18',c:'活动力度大，但有些商品不参加，结账前最好问清楚收银员，我第一次拿的东西有一半不参与。',imgs:[],tag:'注意范围',reply:'给您带来不便抱歉，参与商品都有红色标签标注的～'},
+    {u:'濮阳土著',s:5,d:'2026-09-15',c:'老牌商场了，东西全，价格比新开的那些便宜。服务员态度也还行。',imgs:[],tag:'价格便宜',reply:''}
+  ]
+},
+{
+  n:'盒马鲜生', t:'生鲜超市', s:4.9, month:'月售 1900+',
+  hero:U+'photo-1550989460-0adf9ea622e2?w=800&q=80',
+  addr:'濮阳市华龙区万达广场 B1', time:'09:00 - 22:00', tel:'0393-886 9900',
+  dist:'2.6km', tagline:'满 1000 打 5 折',
+  promos:['单笔满 1000 立享 5 折','鲜活水产满 300 减 100','线上下单 30 分钟达'],
+  tags:['海鲜新鲜','可现场加工','环境干净'],
+  goods:[
+    {n:'波士顿龙虾 1 只',d:'约 500g · 可现场加工',p:198,o:396,sold:'已售 736',img:U+'photo-1559737558-2f5a35f4523b?w=300&q=80'},
+    {n:'智利车厘子 2 斤',d:'JJ 级 · 空运直采',p:129,o:258,sold:'已售 1520',img:U+'photo-1528821128474-27f963b062bf?w=300&q=80'},
+    {n:'挪威三文鱼刺身',d:'200g · 冰鲜',p:88,o:176,sold:'已售 968',img:U+'photo-1519708227418-c8fd9a32b7a2?w=300&q=80'}
+  ],
+  reviews:[
+    {u:'吃货小陈',s:5,d:'2026-09-19',c:'满 1000 打五折这个太狠了，海鲜区直接被扫空。抢到一只波士顿龙虾，现场加工，蒜蓉的，肉很弹。',imgs:[U+'photo-1559737558-2f5a35f4523b?w=200&q=80'],tag:'海鲜新鲜',reply:'感谢支持！中秋期间每天都有鲜活到货～'},
+    {u:'濮阳阿May',s:5,d:'2026-09-18',c:'车厘子打折后一斤不到 65，比我网上买的还便宜，而且很甜。',imgs:[U+'photo-1528821128474-27f963b062bf?w=200&q=80'],tag:'水果新鲜',reply:''},
+    {u:'路人甲',s:3,d:'2026-09-17',c:'人太多，取号等了一个小时才轮到我加工，建议错峰去，或者先线上下单。',imgs:[],tag:'排队久',reply:'非常抱歉，中秋期间客流较大，我们会增加加工窗口～'},
+    {u:'甜品控',s:5,d:'2026-09-16',c:'现做的面包和熟食区真的可以，逛一圈能吃个半饱。',imgs:[],tag:'熟食好吃',reply:''}
+  ]
+},
+{
+  n:'丹尼斯', t:'百货商场', s:4.6, month:'月售 1500+',
+  hero:U+'photo-1472851294608-062f824d29cc?w=800&q=80',
+  addr:'濮阳市华龙区人民路 88 号', time:'10:00 - 21:30', tel:'0393-886 7788',
+  dist:'1.8km', tagline:'买二送一',
+  promos:['酒水区买二送一','中秋礼盒专区 8 折','满 300 送 50 元券'],
+  tags:['品牌齐全','服务好','有停车场'],
+  goods:[
+    {n:'洋河海之蓝 42°',d:'500ml · 绵柔型',p:158,o:198,sold:'已售 1062',img:U+'photo-1569529465841-dfecdab7503b?w=300&q=80'},
+    {n:'五芳斋月饼礼盒',d:'10 饼 6 味',p:108,o:168,sold:'已售 2380',img:U+'photo-1567620905732-2d1ec7ab7445?w=300&q=80'},
+    {n:'雀巢咖啡礼盒',d:'15 条装 · 送杯',p:69,o:99,sold:'已售 862',img:U+'photo-1447933601403-0c6688de566e?w=300&q=80'}
+  ],
+  reviews:[
+    {u:'濮阳老李',s:5,d:'2026-09-18',c:'买二送一，买了两瓶海之蓝送了一瓶，中秋送礼刚好，等于白赚一瓶。',imgs:[U+'photo-1569529465841-dfecdab7503b?w=200&q=80'],tag:'酒水划算',reply:'感谢惠顾，活动持续到 9 月 25 日～'},
+    {u:'静静',s:4,d:'2026-09-16',c:'商场有点旧了，但东西全，服务员态度挺好的，问路都带你过去。',imgs:[],tag:'服务好',reply:''},
+    {u:'濮阳小刘',s:4,d:'2026-09-14',c:'地下停车场有点紧张，建议早点去。别的都挺好。',imgs:[],tag:'停车',reply:''}
+  ]
+},
+{
+  n:'恒丰购物广场', t:'文玩百货', s:4.5, month:'月售 860+',
+  hero:U+'photo-1519566335946-e6f65f0f4f6f?w=800&q=80',
+  addr:'濮阳市华龙区恒丰路 1 号', time:'09:30 - 21:00', tel:'0393-886 3366',
+  dist:'0.9km', tagline:'中秋文玩专场',
+  promos:['文玩专柜满 500 减 100','中秋盲盒 9.9 抽','会员免费鉴定'],
+  tags:['老板懂行','品类多','可议价'],
+  goods:[
+    {n:'小叶紫檀手串',d:'8mm · 老料高密',p:398,o:598,sold:'已售 126',img:U+'photo-1611591437281-460bfbe1220a?w=300&q=80'},
+    {n:'和田玉平安扣',d:'天然 · 附证书',p:268,o:398,sold:'已售 82',img:U+'photo-1515562141207-7a88fb7ce338?w=300&q=80'},
+    {n:'中秋文玩盲盒',d:'9.9 元抽 · 必出好物',p:9.9,o:99,sold:'已售 1268',img:U+'photo-1607082348824-0a96f2a4b9da?w=300&q=80'}
+  ],
+  reviews:[
+    {u:'文玩老饕',s:5,d:'2026-09-17',c:'文玩专柜东西挺全，老板是真懂行，聊了半个多小时一点不耐烦。买的手串密度不错。',imgs:[U+'photo-1611591437281-460bfbe1220a?w=200&q=80'],tag:'老板专业',reply:'谢谢您的认可，欢迎常来喝茶～'},
+    {u:'濮阳小生',s:4,d:'2026-09-15',c:'9.9 抽了个盲盒，出了个小核桃，虽然不贵但挺有意思。',imgs:[],tag:'盲盒好玩',reply:''},
+    {u:'路人丁',s:4,d:'2026-09-12',c:'位置好找，就在商场二楼，逛的人不多，可以慢慢看。',imgs:[],tag:'环境安静',reply:''}
+  ]
+},
+{
+  n:'瑞丰园', t:'中餐宴席', s:4.7, month:'月售 620+',
+  hero:U+'photo-1552566626-52f8b828add9?w=800&q=80',
+  addr:'濮阳市华龙区开州路 219 号', time:'10:30 - 21:00', tel:'0393-886 5566',
+  dist:'3.1km', tagline:'中秋团圆宴',
+  promos:['团圆宴 888 元 / 8 人','包间免服务费','中秋当天送月饼'],
+  tags:['包间多','菜量大','适合家宴'],
+  goods:[
+    {n:'中秋团圆宴',d:'8 人 / 10 菜 1 汤',p:888,o:1088,sold:'已订 62',img:U+'photo-1414235077428-338989a2e8c0?w=300&q=80'},
+    {n:'红焖羊肉锅',d:'本地山羊 · 小锅',p:128,o:158,sold:'已售 862',img:U+'photo-1547592180-85f173990554?w=300&q=80'},
+    {n:'清蒸黄河鲤鱼',d:'现杀 · 1.5 斤',p:88,o:108,sold:'已售 562',img:U+'photo-1519708227418-c8fd9a32b7a2?w=300&q=80'}
+  ],
+  reviews:[
+    {u:'濮阳大姐',s:5,d:'2026-09-18',c:'包间环境不错，中秋家宴定的这里。菜量足，十个人吃 888 那套还剩了不少。',imgs:[U+'photo-1414235077428-338989a2e8c0?w=200&q=80'],tag:'包间不错',reply:'感谢选择瑞丰园，祝您全家团圆美满！'},
+    {u:'油田王哥',s:5,d:'2026-09-15',c:'推荐他们家的红焖羊肉，很嫩，一点膻味都没有。',imgs:[U+'photo-1547592180-85f173990554?w=200&q=80'],tag:'红焖羊肉',reply:''},
+    {u:'小鹿',s:4,d:'2026-09-13',c:'上菜有点慢，其他都好。包间要提前订，周末基本满。',imgs:[],tag:'上菜慢',reply:'抱歉给您带来不便，中秋期间我们已增加人手～'}
+  ]
+},
+{
+  n:'老家水饺', t:'中式快餐', s:4.6, month:'月售 1860+',
+  hero:U+'photo-1563245372-f21724e3856d?w=800&q=80',
+  addr:'濮阳市华龙区黄河路 66 号', time:'10:00 - 21:30', tel:'0393-886 1122',
+  dist:'1.5km', tagline:'双人套餐 59',
+  promos:['双人套餐 59 元','饺子买二送一','学生凭证 9 折'],
+  tags:['量大实惠','上菜快','适合快餐'],
+  goods:[
+    {n:'双人水饺套餐',d:'3 两水饺 + 2 小菜 + 2 饮品',p:59,o:88,sold:'已售 2260',img:U+'photo-1563379926898-05f4575a45d8?w=300&q=80'},
+    {n:'韭菜鸡蛋水饺',d:'现包现煮 · 3 两',p:18,o:22,sold:'已售 8802',img:U+'photo-1563245372-f21724e3856d?w=300&q=80'},
+    {n:'猪肉白菜水饺',d:'招牌 · 3 两',p:18,o:22,sold:'已售 7260',img:U+'photo-1541696490-8744a5dc0228?w=300&q=80'}
+  ],
+  reviews:[
+    {u:'濮阳学生党',s:5,d:'2026-09-19',c:'双人套餐 59，两个人吃到撑，性价比之王。饺子是现包的，皮薄馅大。',imgs:[U+'photo-1563379926898-05f4575a45d8?w=200&q=80'],tag:'性价比高',reply:'谢谢支持，欢迎常来～'},
+    {u:'小周',s:5,d:'2026-09-17',c:'上菜特别快，十分钟不到就上齐了，赶时间的时候很方便。',imgs:[],tag:'上菜快',reply:''},
+    {u:'濮阳老饕',s:4,d:'2026-09-14',c:'味道稳定，就是店面有点小，饭点要等位。',imgs:[],tag:'要等位',reply:''}
+  ]
+},
+{
+  n:'巴奴毛肚火锅', t:'火锅', s:4.8, month:'月售 920+',
+  hero:U+'photo-1583241800698-e8ab01c85b6d?w=800&q=80',
+  addr:'濮阳市华龙区万达广场 4F', time:'11:00 - 22:00', tel:'0393-886 8899',
+  dist:'2.6km', tagline:'中秋家宴',
+  promos:['中秋 4 人套餐 398','毛肚买一送一','会员生日免单'],
+  tags:['毛肚新鲜','菌汤好喝','服务好'],
+  goods:[
+    {n:'中秋 4 人套餐',d:'毛肚 + 肥牛 + 时蔬 + 菌汤',p:398,o:498,sold:'已售 326',img:U+'photo-1583241800698-e8ab01c85b6d?w=300&q=80'},
+    {n:'招牌鲜毛肚',d:'每日空运 · 七上八下',p:68,o:88,sold:'已售 3260',img:U+'photo-1544025162-d76694265947?w=300&q=80'},
+    {n:'菌汤锅底',d:'野生菌 · 现熬',p:48,o:58,sold:'已售 2180',img:U+'photo-1547592180-85f173990554?w=300&q=80'}
+  ],
+  reviews:[
+    {u:'火锅控',s:5,d:'2026-09-18',c:'毛肚是真新鲜，脆得很，七上八下正好。菌汤锅底好喝，我一个人喝了三碗。',imgs:[U+'photo-1544025162-d76694265947?w=200&q=80'],tag:'毛肚新鲜',reply:'感谢认可，我们的毛肚都是当天到店的～'},
+    {u:'濮阳小李',s:4,d:'2026-09-16',c:'好吃是真的好吃，贵也是真的贵，两个人吃了三百多。',imgs:[],tag:'价格偏高',reply:''},
+    {u:'小雅',s:5,d:'2026-09-13',c:'服务特别到位，围裙、手机套、扎头发的皮筋都主动给。',imgs:[],tag:'服务好',reply:'谢谢夸奖，欢迎下次再来～'}
+  ]
+},
+{
+  n:'濮阳水秀街', t:'商圈', s:4.4, month:'月售 2100+',
+  hero:U+'photo-1519566335946-e6f65f0f4f6f?w=800&q=80',
+  addr:'濮阳市华龙区水秀街', time:'10:00 - 23:00', tel:'0393-886 0000',
+  dist:'4.2km', tagline:'中秋市集',
+  promos:['中秋夜市集','小吃街满 50 减 10','非遗手作体验'],
+  tags:['烟火气足','小吃多','适合夜逛'],
+  goods:[
+    {n:'烤面筋 10 串',d:'秘制酱料',p:15,o:20,sold:'已售 8820',img:U+'photo-1555939594-58d7cb561ad1?w=300&q=80'},
+    {n:'濮阳壮馍 1 个',d:'本地特色 · 现做',p:12,o:15,sold:'已售 6210',img:U+'photo-1565299624946-b28f40a0ae38?w=300&q=80'},
+    {n:'手工冰粉',d:'现搓 · 配料足',p:10,o:15,sold:'已售 4260',img:U+'photo-1567620905732-2d1ec7ab7445?w=300&q=80'}
+  ],
+  reviews:[
+    {u:'夜猫子',s:4,d:'2026-09-18',c:'晚上人多，烟火气足，各种小吃应有尽有，就是人挤人。',imgs:[U+'photo-1555939594-58d7cb561ad1?w=200&q=80'],tag:'小吃多',reply:''},
+    {u:'濮阳小赵',s:5,d:'2026-09-15',c:'壮馍是真香，现做的，外酥里嫩，一次能吃俩。',imgs:[],tag:'壮馍好吃',reply:''},
+    {u:'走走停停',s:4,d:'2026-09-12',c:'停车不太好停，建议打车去。晚上灯光挺好看的。',imgs:[],tag:'停车难',reply:''}
+  ]
+},
+{
+  n:'濮阳花艺', t:'花店', s:4.9, month:'月售 460+',
+  hero:U+'photo-1518895949257-7621c3c786d7?w=800&q=80',
+  addr:'濮阳市华龙区黄河东路', time:'09:00 - 21:00', tel:'0393-886 6688',
+  dist:'0.6km', tagline:'玫瑰花束',
+  promos:['中秋花束 8 折','满 199 送花瓶','市区 2 小时送达'],
+  tags:['花新鲜','包装精美','老板人好'],
+  goods:[
+    {n:'99 朵红玫瑰',d:'经典款 · 含包装',p:299,o:399,sold:'已售 126',img:U+'photo-1518895949257-7621c3c786d7?w=300&q=80'},
+    {n:'香槟玫瑰 33 朵',d:'温柔色系 · 含卡片',p:168,o:228,sold:'已售 236',img:U+'photo-1490750967868-88aa4486c946?w=300&q=80'},
+    {n:'向日葵混搭花束',d:'阳光款 · 含包装',p:128,o:168,sold:'已售 362',img:U+'photo-1470509037663-253afd7f0f51?w=300&q=80'}
+  ],
+  reviews:[
+    {u:'濮阳小情侣',s:5,d:'2026-09-19',c:'老板娘人特别好，包装很用心，花很新鲜，送了小卡片还帮忙写字。',imgs:[U+'photo-1518895949257-7621c3c786d7?w=200&q=80'],tag:'老板人好',reply:'谢谢支持，祝你们幸福～'},
+    {u:'求婚成功',s:5,d:'2026-09-17',c:'定的 99 朵，准时送到，花状态特别好，女朋友看到直接哭了。',imgs:[],tag:'准时送达',reply:'恭喜恭喜！祝百年好合！'},
+    {u:'匿名用户',s:5,d:'2026-09-14',c:'价格比别家便宜，质量还更好，回购第三次了。',imgs:[],tag:'性价比高',reply:''}
+  ]
+}
+];
 
-        // 卡片鼠标跟随光晕
-        document.querySelectorAll('.tech-card').forEach(card => {
-            card.addEventListener('mousemove', function(e) {
-                const rect = this.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                const y = ((e.clientY - rect.top) / rect.height) * 100;
-                this.style.setProperty('--mouse-x', `${x}%`);
-                this.style.setProperty('--mouse-y', `${y}%`);
-            });
-        });
+/* ================= 轮播 ================= */
+var BANNERS=[
+  {title:'绿城超市 · 中秋买一送一',sub:'月饼 / 礼盒 / 生鲜 全场买一送一',img:U+'photo-1607920591413-4ec007e70023?w=800&q=80',shop:0},
+  {title:'百姓量贩 · 满 500 减 200',sub:'中秋团圆季 · 全场通用',img:U+'photo-1542838132-92c53300491e?w=800&q=80',shop:1},
+  {title:'盒马鲜生 · 满 1000 打 5 折',sub:'鲜活水产 / 进口水果',img:U+'photo-1550989460-0adf9ea622e2?w=800&q=80',shop:2},
+  {title:'丹尼斯 · 买二送一',sub:'中秋礼盒 / 酒水 / 百货',img:U+'photo-1472851294608-062f824d29cc?w=800&q=80',shop:3}
+];
 
-        // 卡片悬停动画（Anime.js）
-        document.querySelectorAll('.tech-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                anime({
-                    targets: this,
-                    scale: 1.03,
-                    duration: 300,
-                    easing: 'easeOutCubic'
-                });
-            });
-            card.addEventListener('mouseleave', function() {
-                anime({
-                    targets: this,
-                    scale: 1,
-                    duration: 300,
-                    easing: 'easeOutCubic'
-                });
-            });
-        });
+/* ================= 爆款 ================= */
+var HOT=[
+  {n:'稻香村中秋礼盒',p:128,o:168,img:U+'photo-1567620905732-2d1ec7ab7445?w=300&q=80',shop:0},
+  {n:'波士顿龙虾 500g',p:198,o:396,img:U+'photo-1559737558-2f5a35f4523b?w=300&q=80',shop:2},
+  {n:'洋河海之蓝 42°',p:158,o:198,img:U+'photo-1569529465841-dfecdab7503b?w=300&q=80',shop:3},
+  {n:'99 朵红玫瑰花束',p:299,o:399,img:U+'photo-1518895949257-7621c3c786d7?w=300&q=80',shop:9},
+  {n:'阳澄湖大闸蟹 8 只',p:298,o:398,img:U+'photo-1559737558-2f5a35f4523b?w=300&q=80',shop:0},
+  {n:'中秋团圆宴 8 人',p:888,o:1088,img:U+'photo-1414235077428-338989a2e8c0?w=300&q=80',shop:5}
+];
 
-        // 按钮点击波纹
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                const ripple = document.createElement('span');
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = x + 'px';
-                ripple.style.top = y + 'px';
-                ripple.classList.add('ripple');
-                this.appendChild(ripple);
-                setTimeout(() => ripple.remove(), 600);
-            });
-        });
+/* ================= 卡包 ================= */
+var DATA={
+  flower:{name:'精品玫瑰花束 · 1束',memo:'联合商户消费回馈 · 特等奖',code:'HX 9251 8866',
+    store:'<b>兑换门店：</b>濮阳花艺<br><b>门店地址：</b>濮阳市华龙区黄河东路<br><b>联系电话：</b>0393-886 6688<br><b>兑换内容：</b>精品玫瑰花束 1 束',
+    valid:'有效期至 2026-09-25 23:59 · 逾期作废'},
+  box:{name:'神秘礼盒 · 1份',memo:'文玩联营专柜 · 特等奖',code:'HX 9252 0386',
+    store:'<b>兑换门店：</b>恒丰文玩<br><b>门店地址：</b>恒丰购物广场专柜<br><b>联系电话：</b>0393-886 3366<br><b>兑换内容：</b>指定神秘礼盒 1 份',
+    valid:'有效期至 2026-09-25 23:59 · 逾期作废'}
+};
 
-        // 视差滚动
-        window.addEventListener('scroll', function() {
-            const scrolled = window.pageYOffset;
-            const starfield = document.querySelector('#starfield');
-            if (starfield) {
-                starfield.style.transform = `translateY(${scrolled * 0.3}px)`;
-            }
-        });
-    </script>
+/* ================= 工具 ================= */
+var toastTimer;
+function toast(m){
+  var t=document.getElementById('toast');
+  t.textContent=m;t.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.classList.remove('on')},1600);
+}
+function baseUrl(){
+  var u=location.origin+location.pathname.replace(/index\.html$/i,'');
+  u=u.replace(/[?#].*$/,'');
+  if(!u.endsWith('/'))u+='/';
+  return u;
+}
+function renderQR(el,text,size){
+  if(!el)return;el.innerHTML='';
+  if(typeof QRCode==='undefined'){
+    el.innerHTML='<div style="font-size:12px;color:#999;padding:18px;text-align:center;line-height:1.6">二维码加载中<br>请检查网络</div>';
+    return;
+  }
+  new QRCode(el,{text:text,width:size||176,height:size||176,colorDark:'#111',colorLight:'#fff',correctLevel:QRCode.CorrectLevel.H});
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function star(n){var s='';for(var i=1;i<=5;i++)s+= i<=n?'★':'☆';return s}
+
+/* ================= 抽奖 ================= */
+var lotteryLayer=document.getElementById('lotteryLayer');
+var prizeLayer=document.getElementById('prizeLayer');
+var app=document.getElementById('app');
+var wheel=document.getElementById('wheel');
+var lotteryBtn=document.getElementById('lotteryBtn');
+var spun=false;
+function done(){return localStorage.getItem(KEY)==='1'}
+function showApp(){
+  lotteryLayer.classList.add('hide');prizeLayer.classList.add('hide');app.classList.remove('hide');
+  renderCards();updateMineCount();
+}
+function showLottery(){
+  lotteryLayer.classList.remove('hide');prizeLayer.classList.add('hide');app.classList.add('hide');
+}
+lotteryBtn.addEventListener('click',function(){
+  if(spun)return;spun=true;lotteryBtn.disabled=true;lotteryBtn.textContent='抽奖中…';
+  wheel.style.transform='rotate('+(360*6+(360-90))+'deg)';
+  setTimeout(function(){
+    localStorage.setItem(KEY,'1');
+    prizeLayer.classList.remove('hide');lotteryLayer.classList.add('hide');
+  },4400);
+});
+document.getElementById('prizeBtn').addEventListener('click',showApp);
+
+/* ================= Tab ================= */
+var tabs=document.querySelectorAll('.tab');
+tabs.forEach(function(tab){
+  tab.addEventListener('click',function(){
+    tabs.forEach(function(x){x.classList.remove('on')});
+    tab.classList.add('on');
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on')});
+    document.getElementById(tab.dataset.page).classList.add('on');
+    document.getElementById('detailPage').classList.remove('on');
+    document.getElementById('tabbar').classList.remove('hide');
+    document.getElementById('topbar').classList.remove('hide');
+    document.getElementById('content').scrollTop=0;
+    if(tab.dataset.page==='page-card')renderCards();
+    if(tab.dataset.page==='page-mine')updateMineCount();
+  });
+});
+
+/* ================= 轮播 ================= */
+var track=document.getElementById('bannerTrack');
+var dotsBox=document.getElementById('bannerDots');
+track.innerHTML=BANNERS.map(function(b,i){
+  return '<div class="banner-item" data-i="'+i+'">'+
+    '<img src="'+b.img+'" alt="" onerror="this.style.background=\'#8e1a1a\'">'+
+    '<div class="go">查看详情 ›</div>'+
+    '<div class="bd"><div class="t">'+esc(b.title)+'</div><div class="s">'+esc(b.sub)+'</div></div>'+
+  '</div>';
+}).join('');
+dotsBox.innerHTML=BANNERS.map(function(_,i){return '<i'+(i===0?' class="on"':'')+'></i>'}).join('');
+var dots=dotsBox.querySelectorAll('i'),idx=0,bannerTimer;
+function goBanner(i){
+  idx=(i+BANNERS.length)%BANNERS.length;
+  track.style.transform='translateX(-'+(idx*100)+'%)';
+  dots.forEach(function(d,k){d.classList.toggle('on',k===idx)});
+}
+function autoBanner(){clearInterval(bannerTimer);bannerTimer=setInterval(function(){goBanner(idx+1)},3200)}
+autoBanner();
+track.querySelectorAll('.banner-item').forEach(function(el){
+  el.addEventListener('click',function(){
+    openDetail(SHOPS[BANNERS[+el.dataset.i].shop],BANNERS[+el.dataset.i].title);
+  });
+});
+
+/* ================= 列表 ================= */
+function shopRow(s,i){
+  return '<div class="shop-row" data-i="'+i+'">'+
+    '<img class="thumb" src="'+s.hero+'" alt="" onerror="this.style.background=\'#eee\'">'+
+    '<div class="info">'+
+      '<div class="nm">'+esc(s.n)+' <span class="lv">'+esc(s.t)+'</span></div>'+
+      '<div class="ds"><span class="star">★ '+s.s+'</span><span>'+esc(s.month)+'</span><span>'+esc(s.dist)+'</span></div>'+
+      '<div class="tagline">'+esc(s.tagline)+'</div>'+
+    '</div><div class="arrow">›</div></div>';
+}
+document.getElementById('homeShops').innerHTML=SHOPS.slice(0,5).map(shopRow).join('');
+document.getElementById('shopList').innerHTML=SHOPS.map(shopRow).join('');
+document.querySelectorAll('#homeShops .shop-row,#shopList .shop-row').forEach(function(el){
+  el.addEventListener('click',function(){openDetail(SHOPS[+el.dataset.i])});
+});
+
+document.getElementById('hotScroll').innerHTML=HOT.map(function(h,i){
+  return '<div class="hot-card" data-i="'+i+'">'+
+    '<img src="'+h.img+'" alt="" onerror="this.style.background=\'#eee\'">'+
+    '<div class="n">'+esc(h.n)+'</div>'+
+    '<div class="p">¥'+h.p+'<small>¥'+h.o+'</small></div>'+
+  '</div>';
+}).join('');
+document.querySelectorAll('#hotScroll .hot-card').forEach(function(el){
+  el.addEventListener('click',function(){openDetail(SHOPS[HOT[+el.dataset.i].shop])});
+});
+
+/* ================= 分类筛选 ================= */
+document.querySelectorAll('#cateBar .c').forEach(function(c){
+  c.addEventListener('click',function(){
+    document.querySelectorAll('#cateBar .c').forEach(function(x){x.classList.remove('on')});
+    c.classList.add('on');
+    var k=c.textContent;
+    var list=(k==='全部')?SHOPS:SHOPS.filter(function(s){return s.t.indexOf(k)>-1});
+    document.getElementById('shopList').innerHTML=list.length
+      ? list.map(function(s){return shopRow(s,SHOPS.indexOf(s))}).join('')
+      : '<div style="padding:60px;text-align:center;color:#bbb;font-size:13px">该分类暂无商家</div>';
+    document.querySelectorAll('#shopList .shop-row').forEach(function(el){
+      el.addEventListener('click',function(){openDetail(SHOPS[+el.dataset.i])});
+    });
+  });
+});
+
+/* ================= 详情页 ================= */
+var detailPage=document.getElementById('detailPage');
+var lastTab='page-home';
+
+function openDetail(s, customTitle){
+  lastTab=document.querySelector('.tab.on')?document.querySelector('.tab.on').dataset.page:'page-home';
+  var title=customTitle||s.n;
+
+  var promosHtml=s.promos.map(function(p){
+    var m=p.match(/^(.*?)(\d[\d,\.]*\s*(?:折|元|减\d+).*)$/);
+    if(m) return '<div class="p-item"><span class="dot"></span><span>'+esc(m[1])+'<span class="v">'+esc(m[2])+'</span></span></div>';
+    return '<div class="p-item"><span class="dot"></span><span class="v">'+esc(p)+'</span></div>';
+  }).join('');
+
+  var goodsHtml=s.goods.map(function(g){
+    return '<div class="g">'+
+      '<img src="'+g.img+'" alt="" onerror="this.style.background=\'#eee\'">'+
+      '<div class="bd">'+
+        '<div class="n">'+esc(g.n)+'</div>'+
+        '<div class="d">'+esc(g.d)+'</div>'+
+        '<div class="pr"><span class="now"><small>¥</small>'+g.p+'</span>'+
+        (g.o?'<span class="old">¥'+g.o+'</span>':'')+
+        '<span class="sold">'+esc(g.sold)+'</span></div>'+
+      '</div>'+
+      '<div class="buy">领券</div>'+
+    '</div>';
+  }).join('');
+
+  var avg=(s.reviews.reduce(function(a,b){return a+b.s},0)/s.reviews.length).toFixed(1);
+  var tags=s.tags.map(function(t,i){return '<span'+(i===0?' class="on"':'')+'>'+esc(t)+' ('+(200-i*37)+')</span>'}).join('');
+
+  var revHtml=s.reviews.map(function(r){
+    var imgs=r.imgs&&r.imgs.length
+      ? '<div class="rev-imgs">'+r.imgs.map(function(u){return '<img src="'+u+'" alt="" onerror="this.style.display=\'none\'">'}).join('')+'</div>'
+      : '';
+    var reply=r.reply?'<div class="rev-reply"><b>商家回复：</b>'+esc(r.reply)+'</div>':'';
+    var tag=r.tag?'<div class="rev-tag">'+esc(r.tag)+'</div>':'';
+    return '<div class="rev">'+
+      '<div class="rev-hd">'+
+        '<img src="'+nameAvatar(r.u)+'" alt="">'+
+        '<div class="nm">'+esc(r.u)+'</div>'+
+        '<div class="dt">'+esc(r.d)+'</div>'+
+      '</div>'+
+      '<div class="rev-stars">'+star(r.s)+'</div>'+
+      '<div class="rev-c">'+esc(r.c)+'</div>'+
+      imgs+tag+reply+
+    '</div>';
+  }).join('');
+
+  detailPage.innerHTML=
+    '<div class="d-hero">'+
+      '<img src="'+s.hero+'" alt="" onerror="this.style.background=\'#8e1a1a\'">'+
+      '<div class="mask"></div>'+
+      '<div class="d-back" id="dBack">‹</div>'+
+      '<div class="d-share">⋯</div>'+
+      '<div class="cap"><div class="t">'+esc(title)+'</div><div class="s">'+esc(s.tagline)+' · 距您 '+esc(s.dist)+'</div></div>'+
+    '</div>'+
+    '<div class="d-body">'+
+      '<div class="d-block">'+
+        '<div class="d-name">'+esc(s.n)+'</div>'+
+        '<div class="d-score">'+
+          '<span class="st">★ '+s.s+'</span>'+
+          '<span>'+esc(s.month)+'</span>'+
+          '<span class="pill">'+esc(s.t)+'</span>'+
+        '</div>'+
+        '<div class="d-meta">'+
+          '<div class="row"><span class="k">地址</span><span>'+esc(s.addr)+'</span></div>'+
+          '<div class="row"><span class="k">营业</span><span>'+esc(s.time)+'</span></div>'+
+          '<div class="row"><span class="k">电话</span><span>'+esc(s.tel)+'</span></div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="d-promo">'+
+        '<div class="p-hd">中秋专享优惠</div>'+promosHtml+
+      '</div>'+
+      '<div class="d-title">热门商品 <span class="more">共 '+s.goods.length+' 件 ›</span></div>'+
+      '<div class="goods">'+goodsHtml+'</div>'+
+      '<div class="d-title">用户评价 <span class="more">共 '+s.reviews.length+' 条 ›</span></div>'+
+      '<div class="goods" style="padding:0">'+
+        '<div class="rev-top">'+
+          '<div><div class="big">'+avg+'</div><div class="stars">'+star(Math.round(avg))+'</div></div>'+
+          '<div><div class="cnt">'+s.reviews.length+' 条评价 · 好评率 96%</div></div>'+
+        '</div>'+
+        '<div class="rev-tags">'+tags+'</div>'+revHtml+
+      '</div>'+
+      '<div style="height:8px"></div>'+
+    '</div>'+
+    '<div class="d-bar">'+
+      '<div class="ico fn2"><div class="e">⭐</div>收藏</div>'+
+      '<div class="ico fn2"><div class="e">📍</div>导航</div>'+
+      '<button class="btn ghost fn2">电话咨询</button>'+
+      '<button class="btn main fn2">立即领取</button>'+
+    '</div>';
+
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on')});
+  detailPage.classList.add('on');
+  document.getElementById('tabbar').classList.add('hide');
+  document.getElementById('content').scrollTop=0;
+  detailPage.scrollTop=0;
+
+  document.getElementById('dBack').addEventListener('click',closeDetail);
+  detailPage.querySelectorAll('.fn2,.buy,.d-share').forEach(function(el){
+    el.addEventListener('click',function(e){
+      e.stopPropagation();
+      var txt=el.textContent.trim();
+      if(txt==='电话咨询'){toast('客服电话：'+s.tel);return}
+      toast('系统更新中，请稍后再试');
+    });
+  });
+}
+
+function closeDetail(){
+  detailPage.classList.remove('on');
+  document.getElementById('tabbar').classList.remove('hide');
+  document.getElementById('content').scrollTop=0;
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on')});
+  var t=document.querySelector('.tab[data-page="'+lastTab+'"]');
+  if(t){t.classList.add('on');document.getElementById(lastTab).classList.add('on')}
+  else{document.getElementById('page-home').classList.add('on')}
+}
+
+/* ================= 卡包 ================= */
+function renderCards(){
+  var box=document.getElementById('cardBox');
+  if(!done()){
+    box.innerHTML='<div class="card-empty"><div class="e">🎁</div><div class="t">暂无卡包权益</div><div class="s">参与中秋抽奖后可获得特等奖权益</div></div>';
+    return;
+  }
+  box.innerHTML=
+    '<div class="card-item" data-k="flower">'+
+      '<div class="ic a">🌹</div>'+
+      '<div class="bd"><div class="nm">精品玫瑰花束 · 1束</div>'+
+      '<div class="ds">联合商户限时兑换，到店出示核销码</div>'+
+      '<div class="tg"><span>特等奖</span><span class="b">免费兑换</span></div></div>'+
+      '<div class="go">去核销 ›</div>'+
+    '</div>'+
+    '<div class="card-item" data-k="box">'+
+      '<div class="ic b">🎁</div>'+
+      '<div class="bd"><div class="nm">神秘礼盒 · 1份</div>'+
+      '<div class="ds">文玩联营专柜，凭码领取指定礼盒</div>'+
+      '<div class="tg"><span>特等奖</span><span class="b">已预付</span></div></div>'+
+      '<div class="go">去核销 ›</div>'+
+    '</div>'+
+    '<div style="padding:8px 18px;font-size:11px;color:#bbb;line-height:1.9">核销须知：权益仅限本人使用，核销码一次有效。请于 2026-09-25 当天到指定门店出示。</div>';
+  box.querySelectorAll('.card-item').forEach(function(el){
+    el.addEventListener('click',function(){openRedeem(el.dataset.k)});
+  });
+}
+function updateMineCount(){
+  document.getElementById('mCard').textContent=done()?'2':'0';
+}
+
+/* ================= 核销弹层 ================= */
+var mask=document.getElementById('mask');
+function openRedeem(k){
+  var d=DATA[k];if(!d)return;
+  document.getElementById('pn').textContent=d.name;
+  document.getElementById('pm').textContent=d.memo;
+  document.getElementById('pc').textContent=d.code;
+  document.getElementById('ps').innerHTML=d.store;
+  document.getElementById('pv').textContent=d.valid;
+  renderQR(document.getElementById('qr'),baseUrl()+'verify.html?code='+encodeURIComponent(d.code),176);
+  mask.classList.add('on');
+}
+document.getElementById('px').onclick=function(){mask.classList.remove('on')};
+mask.onclick=function(e){if(e.target===mask)mask.classList.remove('on')};
+
+/* ================= 设置 ================= */
+var settingsPage=document.getElementById('settingsPage');
+document.getElementById('btnSetting').addEventListener('click',function(){settingsPage.classList.add('on')});
+document.getElementById('btnBack').addEventListener('click',function(){settingsPage.classList.remove('on')});
+document.getElementById('btnReset').addEventListener('click',function(){
+  if(confirm('确定重置吗？')){
+    localStorage.removeItem(KEY);location.reload();
+  }
+});
+
+/* ================= 维护提示 ================= */
+document.querySelectorAll('.fn').forEach(function(el){
+  el.addEventListener('click',function(){
+    var r=el.querySelector('.r');
+    if(r&&r.textContent.indexOf('0393-618 0000')>-1){toast('客服电话：0393-618 0000');return}
+    toast('系统更新中，请稍后再试');
+  });
+});
+
+/* ================= 启动 ================= */
+if(done()){showApp()}else{showLottery()}
+
+})();
+</script>
 </body>
 </html>
